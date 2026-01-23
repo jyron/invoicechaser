@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Invoice Chaser — Get Paid</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Instrument+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      :root {
+        --bg: #0a0a0a;
+        --card: #141414;
+        --border: #2a2a2a;
+        --text: #fafafa;
+        --text-muted: #888;
+        --accent: #22c55e;
+        --accent-dim: #16a34a;
+        --danger: #ef4444;
+        --warning: #f59e0b;
+      }
+
+      body {
+        font-family: "Instrument Sans", -apple-system, sans-serif;
+        background: var(--bg);
+        color: var(--text);
+        min-height: 100vh;
+        line-height: 1.5;
+      }
+
+      .container {
+        max-width: 560px;
+        margin: 0 auto;
+        padding: 60px 20px;
+      }
+
+      header {
+        margin-bottom: 48px;
+      }
+
+      .logo {
+        font-family: "Space Mono", monospace;
+        font-size: 14px;
+        font-weight: 700;
+        letter-spacing: 0.05em;
+        color: var(--accent);
+        margin-bottom: 24px;
+        text-transform: uppercase;
+      }
+
+      h1 {
+        font-size: 42px;
+        font-weight: 700;
+        line-height: 1.1;
+        margin-bottom: 16px;
+        letter-spacing: -0.02em;
+      }
+
+      .subtitle {
+        font-size: 18px;
+        color: var(--text-muted);
+        max-width: 400px;
+      }
+
+      .card {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 32px;
+        margin-bottom: 24px;
+      }
+
+      .form-group {
+        margin-bottom: 24px;
+      }
+
+      .form-group:last-child {
+        margin-bottom: 0;
+      }
+
+      label {
+        display: block;
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--text-muted);
+        margin-bottom: 8px;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+      }
+
+      input,
+      textarea,
+      select {
+        width: 100%;
+        padding: 14px 16px;
+        background: var(--bg);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        color: var(--text);
+        font-family: inherit;
+        font-size: 16px;
+        transition: border-color 0.2s, box-shadow 0.2s;
+      }
+
+      input:focus,
+      textarea:focus,
+      select:focus {
+        outline: none;
+        border-color: var(--accent);
+        box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.15);
+      }
+
+      input::placeholder,
+      textarea::placeholder {
+        color: #555;
+      }
+
+      textarea {
+        resize: vertical;
+        min-height: 120px;
+      }
+
+      .row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+      }
+
+      .btn {
+        width: 100%;
+        padding: 16px 24px;
+        background: var(--accent);
+        color: #000;
+        border: none;
+        border-radius: 8px;
+        font-family: inherit;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background 0.2s, transform 0.1s;
+      }
+
+      .btn:hover {
+        background: var(--accent-dim);
+      }
+
+      .btn:active {
+        transform: scale(0.98);
+      }
+
+      .btn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+
+      .how-it-works {
+        margin-top: 48px;
+      }
+
+      .how-it-works h2 {
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--text-muted);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        margin-bottom: 24px;
+      }
+
+      .steps {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+      }
+
+      .step {
+        display: flex;
+        align-items: flex-start;
+        gap: 16px;
+      }
+
+      .step-number {
+        font-family: "Space Mono", monospace;
+        font-size: 12px;
+        font-weight: 700;
+        color: var(--accent);
+        background: rgba(34, 197, 94, 0.1);
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+      }
+
+      .step-text {
+        font-size: 15px;
+        color: var(--text-muted);
+        padding-top: 4px;
+      }
+
+      .active-invoices {
+        margin-top: 48px;
+      }
+
+      .active-invoices h2 {
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--text-muted);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        margin-bottom: 16px;
+      }
+
+      .invoice-item {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        padding: 20px;
+        margin-bottom: 12px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        animation: slideIn 0.3s ease;
+      }
+
+      @keyframes slideIn {
+        from {
+          opacity: 0;
+          transform: translateY(-10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .invoice-info {
+        flex: 1;
+      }
+
+      .invoice-client {
+        font-weight: 600;
+        font-size: 16px;
+        margin-bottom: 4px;
+      }
+
+      .invoice-details {
+        font-size: 14px;
+        color: var(--text-muted);
+      }
+
+      .invoice-amount {
+        font-family: "Space Mono", monospace;
+        font-weight: 700;
+        color: var(--accent);
+      }
+
+      .invoice-status {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+      }
+
+      .chase-count {
+        font-size: 13px;
+        color: var(--text-muted);
+      }
+
+      .chase-count span {
+        color: var(--warning);
+        font-weight: 600;
+      }
+
+      .btn-stop {
+        padding: 8px 16px;
+        background: transparent;
+        color: var(--danger);
+        border: 1px solid var(--danger);
+        border-radius: 6px;
+        font-family: inherit;
+        font-size: 13px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background 0.2s;
+      }
+
+      .btn-stop:hover {
+        background: rgba(239, 68, 68, 0.1);
+      }
+
+      .btn-paid {
+        padding: 8px 16px;
+        background: transparent;
+        color: var(--accent);
+        border: 1px solid var(--accent);
+        border-radius: 6px;
+        font-family: inherit;
+        font-size: 13px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background 0.2s;
+        margin-right: 8px;
+      }
+
+      .btn-paid:hover {
+        background: rgba(34, 197, 94, 0.1);
+      }
+
+      .empty-state {
+        text-align: center;
+        padding: 40px 20px;
+        color: var(--text-muted);
+        font-size: 15px;
+      }
+
+      .success-toast {
+        position: fixed;
+        bottom: 24px;
+        right: 24px;
+        background: var(--accent);
+        color: #000;
+        padding: 16px 24px;
+        border-radius: 8px;
+        font-weight: 600;
+        display: none;
+        animation: toastIn 0.3s ease;
+      }
+
+      @keyframes toastIn {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .preview-section {
+        margin-top: 24px;
+        padding-top: 24px;
+        border-top: 1px solid var(--border);
+      }
+
+      .preview-toggle {
+        font-size: 14px;
+        color: var(--text-muted);
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .preview-toggle:hover {
+        color: var(--text);
+      }
+
+      .preview-content {
+        margin-top: 16px;
+        padding: 20px;
+        background: var(--bg);
+        border-radius: 8px;
+        font-size: 14px;
+        line-height: 1.7;
+        color: var(--text-muted);
+        display: none;
+      }
+
+      .preview-content.show {
+        display: block;
+      }
+
+      .preview-content p {
+        margin-bottom: 12px;
+      }
+
+      .preview-content p:last-child {
+        margin-bottom: 0;
+      }
+
+      footer {
+        margin-top: 64px;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 13px;
+      }
+
+      footer a {
+        color: var(--accent);
+        text-decoration: none;
+      }
+
+      @media (max-width: 500px) {
+        h1 {
+          font-size: 32px;
+        }
+
+        .row {
+          grid-template-columns: 1fr;
+        }
+
+        .invoice-item {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 16px;
+        }
+
+        .invoice-status {
+          width: 100%;
+          justify-content: space-between;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <div class="logo">Invoice Chaser</div>
+        <h1>Get paid without the awkward emails.</h1>
+        <p class="subtitle">
+          Add an invoice. We send polite follow-ups every 3 days until you get
+          your money.
+        </p>
+      </header>
+
+      <div class="card">
+        <form id="invoiceForm">
+          <div class="form-group">
+            <label>Client Email</label>
+            <input
+              type="email"
+              id="clientEmail"
+              placeholder="client@company.com"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label>Client Name</label>
+            <input
+              type="text"
+              id="clientName"
+              placeholder="John Smith"
+              required
+            />
+          </div>
+
+          <div class="row">
+            <div class="form-group">
+              <label>Invoice Amount</label>
+              <input
+                type="text"
+                id="invoiceAmount"
+                placeholder="$5,000"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label>Invoice Number</label>
+              <input
+                type="text"
+                id="invoiceNumber"
+                placeholder="INV-001"
+                required
+              />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Your Name</label>
+            <input type="text" id="yourName" placeholder="Your name" required />
+          </div>
+
+          <div class="form-group">
+            <label>Your Email</label>
+            <input
+              type="email"
+              id="yourEmail"
+              placeholder="you@company.com"
+              required
+            />
+          </div>
+
+          <div class="preview-section">
+            <div class="preview-toggle" onclick="togglePreview()">
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                <circle cx="12" cy="12" r="3"></circle>
+              </svg>
+              Preview email template
+            </div>
+            <div class="preview-content" id="previewContent">
+              <p>Hi <strong>[Client Name]</strong>,</p>
+              <p>
+                I hope you're doing well. I wanted to follow up on invoice
+                <strong>[Invoice #]</strong> for <strong>[Amount]</strong>,
+                which appears to still be outstanding.
+              </p>
+              <p>
+                I understand things get busy, so I just wanted to send a
+                friendly reminder. Please let me know if you have any questions
+                or if there's anything I can help with to process this payment.
+              </p>
+              <p>Thanks so much,<br /><strong>[Your Name]</strong></p>
+            </div>
+          </div>
+
+          <div class="form-group" style="margin-top: 24px">
+            <button type="submit" class="btn" id="submitBtn">
+              Start Chasing
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <div class="how-it-works">
+        <h2>How it works</h2>
+        <div class="steps">
+          <div class="step">
+            <div class="step-number">1</div>
+            <div class="step-text">Add your unpaid invoice details above</div>
+          </div>
+          <div class="step">
+            <div class="step-number">2</div>
+            <div class="step-text">
+              We send a polite follow-up email immediately, then every 3 days
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-number">3</div>
+            <div class="step-text">
+              Click "Got Paid" when the money lands and we stop
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="active-invoices" id="activeInvoices">
+        <h2>Active Chases</h2>
+        <div id="invoiceList">
+          <div class="empty-state">Loading...</div>
+        </div>
+      </div>
+
+      <footer>
+        <p>
+          Built by <a href="#">Jyron</a> — because asking for money should not
+          be awkward.
+        </p>
+      </footer>
+    </div>
+
+    <div class="success-toast" id="toast">Invoice added! First email sent.</div>
+
+    <script>
+      const API = "/api";
+
+      async function fetchInvoices() {
+        try {
+          const res = await fetch(`${API}/invoices`);
+          const invoices = await res.json();
+          renderInvoices(invoices);
+        } catch (err) {
+          console.error(err);
+          renderInvoices([]);
+        }
+      }
+
+      function renderInvoices(invoices) {
+        const list = document.getElementById("invoiceList");
+
+        if (!invoices || invoices.length === 0) {
+          list.innerHTML =
+            '<div class="empty-state">No active invoices. Add one above to start chasing.</div>';
+          return;
+        }
+
+        list.innerHTML = invoices
+          .map(
+            (inv) => `
+                <div class="invoice-item">
+                    <div class="invoice-info">
+                        <div class="invoice-client">${inv.client_name}</div>
+                        <div class="invoice-details">
+                            <span class="invoice-amount">${inv.amount}</span> · ${inv.invoice_number} · ${inv.client_email}
+                        </div>
+                    </div>
+                    <div class="invoice-status">
+                        <div class="chase-count"><span>${inv.chase_count}</span> emails sent</div>
+                        <button class="btn-paid" onclick="markPaid('${inv.id}')">Got Paid</button>
+                        <button class="btn-stop" onclick="stopChasing('${inv.id}')">Stop</button>
+                    </div>
+                </div>
+            `
+          )
+          .join("");
+      }
+
+      function showToast(message) {
+        const toast = document.getElementById("toast");
+        toast.textContent = message;
+        toast.style.display = "block";
+        setTimeout(() => {
+          toast.style.display = "none";
+        }, 3000);
+      }
+
+      function togglePreview() {
+        const content = document.getElementById("previewContent");
+        content.classList.toggle("show");
+      }
+
+      document
+        .getElementById("invoiceForm")
+        .addEventListener("submit", async function (e) {
+          e.preventDefault();
+
+          const btn = document.getElementById("submitBtn");
+          btn.disabled = true;
+          btn.textContent = "Sending...";
+
+          const invoice = {
+            clientEmail: document.getElementById("clientEmail").value,
+            clientName: document.getElementById("clientName").value,
+            amount: document.getElementById("invoiceAmount").value,
+            invoiceNumber: document.getElementById("invoiceNumber").value,
+            yourName: document.getElementById("yourName").value,
+            yourEmail: document.getElementById("yourEmail").value,
+          };
+
+          try {
+            const res = await fetch(`${API}/invoices`, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(invoice),
+            });
+
+            if (!res.ok) throw new Error("Failed");
+
+            this.reset();
+            fetchInvoices();
+            showToast("Invoice added! First email sent.");
+          } catch (err) {
+            showToast("Failed to send. Please check your settings.");
+          } finally {
+            btn.disabled = false;
+            btn.textContent = "Start Chasing";
+          }
+        });
+
+      async function markPaid(id) {
+        try {
+          await fetch(`${API}/invoices/${id}/paid`, { method: "POST" });
+          fetchInvoices();
+          showToast("Marked as paid.");
+        } catch (err) {
+          showToast("Something went wrong.");
+        }
+      }
+
+      async function stopChasing(id) {
+        try {
+          await fetch(`${API}/invoices/${id}/stop`, { method: "POST" });
+          fetchInvoices();
+          showToast("Stopped chasing.");
+        } catch (err) {
+          showToast("Something went wrong.");
+        }
+      }
+
+      fetchInvoices();
+    </script>
+  </body>
+</html>
