@@ -308,5 +308,4 @@ async function handler(req) {
   });
 }
 
-console.log("Invoice Chaser running on http://localhost:8000");
 serve(handler, { port: 8000 });
