@@ -628,6 +628,35 @@
         content.classList.toggle("show");
       }
 
+      function updatePreview() {
+        const clientName = document.getElementById("clientName").value || "[Client Name]";
+        const invoiceNumber = document.getElementById("invoiceNumber").value || "[Invoice #]";
+        const amount = document.getElementById("invoiceAmount").value || "[Amount]";
+        const yourName = document.getElementById("yourName").value || "[Your Name]";
+
+        const previewContent = document.getElementById("previewContent");
+        previewContent.innerHTML = `
+          <p>Hi <strong>${clientName}</strong>,</p>
+          <p>
+            I hope you're doing well. I wanted to follow up on invoice
+            <strong>${invoiceNumber}</strong> for <strong>${amount}</strong>,
+            which appears to still be outstanding.
+          </p>
+          <p>
+            I understand things get busy, so I just wanted to send a
+            friendly reminder. Please let me know if you have any questions
+            or if there's anything I can help with to process this payment.
+          </p>
+          <p>Thanks so much,<br /><strong>${yourName}</strong></p>
+        `;
+      }
+
+      // Add event listeners to update preview in real-time
+      document.getElementById("clientName").addEventListener("input", updatePreview);
+      document.getElementById("invoiceNumber").addEventListener("input", updatePreview);
+      document.getElementById("invoiceAmount").addEventListener("input", updatePreview);
+      document.getElementById("yourName").addEventListener("input", updatePreview);
+
       document
         .getElementById("invoiceForm")
         .addEventListener("submit", async function (e) {
