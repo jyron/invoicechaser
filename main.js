@@ -755,4 +755,4 @@ async function handler(req) {
   });
 }
 
-serve(handler, { port: 8000 });
+serve(handler, { port: parseInt(Deno.env.get("PORT") || "8000") });
