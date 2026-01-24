@@ -755,4 +755,7 @@ async function handler(req) {
   });
 }
 
-serve(handler, { port: parseInt(Deno.env.get("PORT") || "8000") });
+serve(handler, {
+  port: parseInt(Deno.env.get("PORT") || "8000"),
+  hostname: "0.0.0.0",
+});
