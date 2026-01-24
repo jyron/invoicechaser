@@ -552,6 +552,13 @@ async function handler(req) {
   const path = url.pathname;
   const method = req.method;
 
+  console.log(`${method} ${path}`);
+
+  // Health check for root path (for deployment platforms)
+  if (path === "/" && method === "HEAD") {
+    return new Response(null, { status: 200 });
+  }
+
   // Clean up old rate limits occasionally
   if (Math.random() < 0.01) {
     cleanupRateLimits().catch(console.error);
@@ -753,10 +760,22 @@ async function handler(req) {
   }
 
   if (path === "/api/health" && method === "GET") {
-    const result = await db.execute(
-      "SELECT COUNT(*) as count FROM invoices WHERE status = 'active'"
-    );
-    return jsonResponse({ status: "ok", invoiceCount: result.rows[0].count });
+    try {
+      const result = await db.execute(
+        "SELECT COUNT(*) as count FROM invoices WHERE status = 'active'"
+      );
+      return jsonResponse({
+        status: "ok",
+        dbInitialized: dbInitialized,
+        invoiceCount: result.rows[0].count,
+      });
+    } catch (error) {
+      return jsonResponse({
+        status: "ok",
+        dbInitialized: dbInitialized,
+        error: "Database not ready",
+      });
+    }
   }
 
   // =====================
@@ -773,6 +792,5 @@ async function handler(req) {
 console.log("Starting server...");
 serve(handler, {
   port: parseInt(Deno.env.get("PORT") || "8000"),
-  hostname: "0.0.0.0",
 });
 console.log("Server started successfully");
