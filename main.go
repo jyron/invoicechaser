@@ -202,7 +202,9 @@ func router(w http.ResponseWriter, r *http.Request) {
 	case path == "/api/health" && method == "GET":
 		handleHealth(w, r)
 	default:
-		http.NotFound(w, r)
+		// Serve static files from public directory
+		fs := http.FileServer(http.Dir("public"))
+		http.StripPrefix("/", fs).ServeHTTP(w, r)
 	}
 }
 
