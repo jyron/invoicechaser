@@ -19,64 +19,78 @@ console.log("APP_URL", APP_URL);
 const SESSION_SECRET =
   Deno.env.get("SESSION_SECRET") || "change-this-secret-in-production";
 
-// Initialize database tables
-await db.execute(`
-    CREATE TABLE IF NOT EXISTS users (
-        id TEXT PRIMARY KEY,
-        google_id TEXT UNIQUE NOT NULL,
-        email TEXT NOT NULL,
-        name TEXT NOT NULL,
-        created_at TEXT NOT NULL
-    )
-`);
+// Initialize database tables asynchronously (non-blocking)
+let dbInitialized = false;
+async function initializeDatabase() {
+  try {
+    console.log("Initializing database...");
+    await db.execute(`
+        CREATE TABLE IF NOT EXISTS users (
+            id TEXT PRIMARY KEY,
+            google_id TEXT UNIQUE NOT NULL,
+            email TEXT NOT NULL,
+            name TEXT NOT NULL,
+            created_at TEXT NOT NULL
+        )
+    `);
 
-await db.execute(`
-    CREATE TABLE IF NOT EXISTS invoices (
-        id TEXT PRIMARY KEY,
-        user_id TEXT,
-        client_email TEXT NOT NULL,
-        client_name TEXT NOT NULL,
-        amount TEXT NOT NULL,
-        invoice_number TEXT NOT NULL,
-        your_name TEXT NOT NULL,
-        your_email TEXT NOT NULL,
-        chase_count INTEGER DEFAULT 1,
-        status TEXT DEFAULT 'active',
-        created_at TEXT NOT NULL,
-        next_chase TEXT NOT NULL,
-        last_chase TEXT NOT NULL,
-        paid_at TEXT,
-        FOREIGN KEY (user_id) REFERENCES users(id)
-    )
-`);
+    await db.execute(`
+        CREATE TABLE IF NOT EXISTS invoices (
+            id TEXT PRIMARY KEY,
+            user_id TEXT,
+            client_email TEXT NOT NULL,
+            client_name TEXT NOT NULL,
+            amount TEXT NOT NULL,
+            invoice_number TEXT NOT NULL,
+            your_name TEXT NOT NULL,
+            your_email TEXT NOT NULL,
+            chase_count INTEGER DEFAULT 1,
+            status TEXT DEFAULT 'active',
+            created_at TEXT NOT NULL,
+            next_chase TEXT NOT NULL,
+            last_chase TEXT NOT NULL,
+            paid_at TEXT,
+            FOREIGN KEY (user_id) REFERENCES users(id)
+        )
+    `);
 
-await db.execute(`
-    CREATE TABLE IF NOT EXISTS rate_limits (
-        id TEXT PRIMARY KEY,
-        ip_address TEXT NOT NULL,
-        action TEXT NOT NULL,
-        created_at TEXT NOT NULL
-    )
-`);
+    await db.execute(`
+        CREATE TABLE IF NOT EXISTS rate_limits (
+            id TEXT PRIMARY KEY,
+            ip_address TEXT NOT NULL,
+            action TEXT NOT NULL,
+            created_at TEXT NOT NULL
+        )
+    `);
 
-await db.execute(`
-    CREATE TABLE IF NOT EXISTS sessions (
-        id TEXT PRIMARY KEY,
-        user_id TEXT NOT NULL,
-        created_at TEXT NOT NULL,
-        expires_at TEXT NOT NULL,
-        FOREIGN KEY (user_id) REFERENCES users(id)
-    )
-`);
+    await db.execute(`
+        CREATE TABLE IF NOT EXISTS sessions (
+            id TEXT PRIMARY KEY,
+            user_id TEXT NOT NULL,
+            created_at TEXT NOT NULL,
+            expires_at TEXT NOT NULL,
+            FOREIGN KEY (user_id) REFERENCES users(id)
+        )
+    `);
 
-// Try to add user_id column if it doesn't exist (for existing databases)
-try {
-  await db.execute(
-    `ALTER TABLE invoices ADD COLUMN user_id TEXT REFERENCES users(id)`
-  );
-} catch (e) {
-  // Column likely already exists
+    // Try to add user_id column if it doesn't exist (for existing databases)
+    try {
+      await db.execute(
+        `ALTER TABLE invoices ADD COLUMN user_id TEXT REFERENCES users(id)`
+      );
+    } catch (e) {
+      // Column likely already exists
+    }
+
+    dbInitialized = true;
+    console.log("Database initialized successfully");
+  } catch (error) {
+    console.error("Database initialization error:", error);
+  }
 }
+
+// Start database initialization in background
+initializeDatabase();
 
 function generateId() {
   return crypto.randomUUID();
@@ -756,7 +770,9 @@ async function handler(req) {
   });
 }
 
+console.log("Starting server...");
 serve(handler, {
   port: parseInt(Deno.env.get("PORT") || "8000"),
   hostname: "0.0.0.0",
 });
+console.log("Server started successfully");
