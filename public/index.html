@@ -452,7 +452,7 @@
     <div class="container">
       <nav class="nav">
         <div class="logo">Invoice Chaser</div>
-        <a href="/api/auth/google" class="btn-signin">
+        <a class="btn-signin auth-link" href="/api/auth/google">
           <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
             <path
               fill="#4285F4"
@@ -482,7 +482,7 @@
           days until you get your money. No more uncomfortable conversations.
         </p>
         <div class="hero-cta">
-          <a href="/api/auth/google" class="btn">Get Started Free</a>
+          <a class="btn auth-link" href="/api/auth/google">Get Started Free</a>
           <a href="#try-it" class="btn btn-outline">See it in action</a>
         </div>
       </header>
@@ -585,7 +585,7 @@
               Dashboard to track all invoices
             </div>
           </div>
-          <a href="/api/auth/google" class="btn btn-full">Get Started Free</a>
+          <a class="btn btn-full auth-link" href="/api/auth/google">Get Started Free</a>
         </div>
       </section>
 
@@ -650,7 +650,7 @@
               see? Sign up to start chasing your invoices.
             </p>
             <div style="margin-top: 20px">
-              <a href="/api/auth/google" class="btn">Get Started Free</a>
+              <a class="btn auth-link" href="/api/auth/google">Get Started Free</a>
             </div>
           </div>
         </div>
@@ -666,23 +666,26 @@
 
     <div class="success-toast" id="toast"></div>
 
+    <script src="/config.js"></script>
     <script>
-      // Check if user is already logged in
+      const API_URL = window.API_URL || "";
+
+      document.querySelectorAll(".auth-link").forEach(link => {
+        link.href = API_URL + "/api/auth/google";
+      });
+
       async function checkAuth() {
         try {
-          const res = await fetch("/api/auth/me");
+          const res = await fetch(API_URL + "/api/auth/me", { credentials: "include" });
           const data = await res.json();
           if (data.authenticated) {
             window.location.href = "/dashboard.html";
           }
-        } catch (err) {
-          // Not logged in, stay on landing page
-        }
+        } catch (err) {}
       }
 
       checkAuth();
 
-      // Handle test email form
       document
         .getElementById("tryItForm")
         .addEventListener("submit", async function (e) {
@@ -698,12 +701,13 @@
           errorEl.classList.remove("show");
 
           const email = document.getElementById("testEmail").value;
-          const website = document.getElementById("website").value; // Honeypot
+          const website = document.getElementById("website").value;
 
           try {
-            const res = await fetch("/api/test-email", {
+            const res = await fetch(API_URL + "/api/test-email", {
               method: "POST",
               headers: { "Content-Type": "application/json" },
+              credentials: "include",
               body: JSON.stringify({ email, website }),
             });
 
@@ -713,7 +717,6 @@
               throw new Error(data.error || "Failed to send email");
             }
 
-            // Show success state
             formEl.style.display = "none";
             successEl.classList.add("show");
           } catch (err) {
@@ -724,7 +727,6 @@
           }
         });
 
-      // Check for auth errors in URL
       const urlParams = new URLSearchParams(window.location.search);
       if (urlParams.get("error") === "auth_failed") {
         const toast = document.getElementById("toast");
@@ -734,7 +736,6 @@
         setTimeout(() => {
           toast.style.display = "none";
         }, 4000);
-        // Clean up URL
         window.history.replaceState({}, document.title, "/");
       }
     </script>

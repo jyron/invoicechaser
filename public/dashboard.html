@@ -604,14 +604,15 @@
 
     <div class="success-toast" id="toast">Invoice added! First email sent.</div>
 
+    <script src="/config.js"></script>
     <script>
-      const API = "/api";
+      const API_URL = window.API_URL || "";
+      const API = API_URL + "/api";
       let currentUser = null;
 
-      // Check authentication
       async function checkAuth() {
         try {
-          const res = await fetch(`${API}/auth/me`);
+          const res = await fetch(`${API}/auth/me`, { credentials: "include" });
           const data = await res.json();
 
           if (!data.authenticated) {
@@ -624,7 +625,6 @@
           document.getElementById("loadingState").style.display = "none";
           document.getElementById("dashboardContent").style.display = "block";
 
-          // Pre-fill user's name and email if available
           if (currentUser.name) {
             document.getElementById("yourName").value = currentUser.name;
           }
@@ -634,7 +634,6 @@
 
           fetchInvoices();
         } catch (err) {
-          console.error("Auth check failed:", err);
           window.location.href = "/";
         }
       }
@@ -642,23 +641,20 @@
       function displayUser(user) {
         const initial = user.name ? user.name.charAt(0).toUpperCase() : "?";
         document.getElementById("userAvatar").textContent = initial;
-        document.getElementById("userName").textContent =
-          user.name || "Unknown";
+        document.getElementById("userName").textContent = user.name || "Unknown";
         document.getElementById("userEmail").textContent = user.email || "";
       }
 
       async function logout() {
         try {
-          await fetch(`${API}/auth/logout`, { method: "POST" });
-        } catch (err) {
-          console.error("Logout error:", err);
-        }
+          await fetch(`${API}/auth/logout`, { method: "POST", credentials: "include" });
+        } catch (err) {}
         window.location.href = "/";
       }
 
       async function fetchInvoices() {
         try {
-          const res = await fetch(`${API}/invoices`);
+          const res = await fetch(`${API}/invoices`, { credentials: "include" });
           if (res.status === 401) {
             window.location.href = "/";
             return;
@@ -666,7 +662,6 @@
           const invoices = await res.json();
           renderInvoices(invoices);
         } catch (err) {
-          console.error(err);
           renderInvoices([]);
         }
       }
@@ -799,6 +794,7 @@
             const res = await fetch(`${API}/invoices`, {
               method: "POST",
               headers: { "Content-Type": "application/json" },
+              credentials: "include",
               body: JSON.stringify(invoice),
             });
 
@@ -832,6 +828,7 @@
         try {
           const res = await fetch(`${API}/invoices/${id}/paid`, {
             method: "POST",
+            credentials: "include",
           });
           if (res.status === 401) {
             window.location.href = "/";
@@ -848,6 +845,7 @@
         try {
           const res = await fetch(`${API}/invoices/${id}/stop`, {
             method: "POST",
+            credentials: "include",
           });
           if (res.status === 401) {
             window.location.href = "/";
