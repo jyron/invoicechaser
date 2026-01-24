@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Invoice Chaser — Get Paid</title>
+    <title>Invoice Chaser — Get Paid Without the Awkward Emails</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -38,7 +38,7 @@
       }
 
       .container {
-        max-width: 560px;
+        max-width: 640px;
         margin: 0 auto;
         padding: 60px 20px;
       }
@@ -47,28 +47,226 @@
         margin-bottom: 48px;
       }
 
+      .nav {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 64px;
+      }
+
       .logo {
         font-family: "Space Mono", monospace;
         font-size: 14px;
         font-weight: 700;
         letter-spacing: 0.05em;
         color: var(--accent);
-        margin-bottom: 24px;
         text-transform: uppercase;
       }
 
+      .btn-signin {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        padding: 12px 20px;
+        background: var(--card);
+        color: var(--text);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        font-family: inherit;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        text-decoration: none;
+        transition: border-color 0.2s, background 0.2s;
+      }
+
+      .btn-signin:hover {
+        border-color: var(--text-muted);
+        background: var(--border);
+      }
+
+      .btn-signin svg {
+        width: 18px;
+        height: 18px;
+      }
+
+      .hero {
+        text-align: center;
+        margin-bottom: 64px;
+      }
+
       h1 {
-        font-size: 42px;
+        font-size: 48px;
         font-weight: 700;
         line-height: 1.1;
-        margin-bottom: 16px;
+        margin-bottom: 20px;
         letter-spacing: -0.02em;
       }
 
       .subtitle {
+        font-size: 20px;
+        color: var(--text-muted);
+        max-width: 480px;
+        margin: 0 auto 32px;
+      }
+
+      .hero-cta {
+        display: flex;
+        gap: 16px;
+        justify-content: center;
+        flex-wrap: wrap;
+      }
+
+      .btn {
+        display: inline-block;
+        padding: 16px 32px;
+        background: var(--accent);
+        color: #000;
+        border: none;
+        border-radius: 8px;
+        font-family: inherit;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        text-decoration: none;
+        transition: background 0.2s, transform 0.1s;
+      }
+
+      .btn:hover {
+        background: var(--accent-dim);
+      }
+
+      .btn:active {
+        transform: scale(0.98);
+      }
+
+      .btn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+
+      .btn-outline {
+        background: transparent;
+        color: var(--text);
+        border: 1px solid var(--border);
+      }
+
+      .btn-outline:hover {
+        background: var(--card);
+        border-color: var(--text-muted);
+      }
+
+      .section {
+        margin-bottom: 64px;
+      }
+
+      .section-title {
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--text-muted);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        margin-bottom: 24px;
+        text-align: center;
+      }
+
+      .how-it-works {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+      }
+
+      .step {
+        display: flex;
+        align-items: flex-start;
+        gap: 20px;
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 24px;
+      }
+
+      .step-number {
+        font-family: "Space Mono", monospace;
+        font-size: 14px;
+        font-weight: 700;
+        color: var(--accent);
+        background: rgba(34, 197, 94, 0.1);
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+      }
+
+      .step-content h3 {
+        font-size: 18px;
+        font-weight: 600;
+        margin-bottom: 6px;
+      }
+
+      .step-content p {
+        font-size: 15px;
+        color: var(--text-muted);
+      }
+
+      .pricing-card {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 32px;
+        text-align: center;
+      }
+
+      .pricing-badge {
+        display: inline-block;
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--accent);
+        background: rgba(34, 197, 94, 0.1);
+        padding: 6px 12px;
+        border-radius: 20px;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        margin-bottom: 16px;
+      }
+
+      .pricing-price {
+        font-size: 48px;
+        font-weight: 700;
+        margin-bottom: 8px;
+      }
+
+      .pricing-price span {
         font-size: 18px;
         color: var(--text-muted);
-        max-width: 400px;
+        font-weight: 400;
+      }
+
+      .pricing-description {
+        color: var(--text-muted);
+        margin-bottom: 24px;
+      }
+
+      .pricing-features {
+        text-align: left;
+        margin-bottom: 24px;
+      }
+
+      .pricing-feature {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 10px 0;
+        font-size: 15px;
+        color: var(--text-muted);
+      }
+
+      .pricing-feature svg {
+        color: var(--accent);
+        flex-shrink: 0;
       }
 
       .card {
@@ -76,11 +274,24 @@
         border: 1px solid var(--border);
         border-radius: 12px;
         padding: 32px;
+      }
+
+      .try-it-title {
+        font-size: 24px;
+        font-weight: 700;
+        margin-bottom: 8px;
+        text-align: center;
+      }
+
+      .try-it-subtitle {
+        font-size: 15px;
+        color: var(--text-muted);
+        text-align: center;
         margin-bottom: 24px;
       }
 
       .form-group {
-        margin-bottom: 24px;
+        margin-bottom: 20px;
       }
 
       .form-group:last-child {
@@ -124,203 +335,68 @@
         color: #555;
       }
 
-      textarea {
-        resize: vertical;
-        min-height: 120px;
+      .honeypot {
+        position: absolute;
+        left: -9999px;
+        opacity: 0;
+        height: 0;
+        width: 0;
+        pointer-events: none;
       }
 
-      .row {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 16px;
-      }
-
-      .btn {
+      .btn-full {
         width: 100%;
-        padding: 16px 24px;
-        background: var(--accent);
-        color: #000;
-        border: none;
-        border-radius: 8px;
-        font-family: inherit;
-        font-size: 16px;
-        font-weight: 600;
-        cursor: pointer;
-        transition: background 0.2s, transform 0.1s;
       }
 
-      .btn:hover {
-        background: var(--accent-dim);
+      .success-message {
+        text-align: center;
+        padding: 24px;
+        display: none;
       }
 
-      .btn:active {
-        transform: scale(0.98);
+      .success-message.show {
+        display: block;
       }
 
-      .btn:disabled {
-        opacity: 0.5;
-        cursor: not-allowed;
-      }
-
-      .how-it-works {
-        margin-top: 48px;
-      }
-
-      .how-it-works h2 {
-        font-size: 13px;
-        font-weight: 600;
-        color: var(--text-muted);
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
-        margin-bottom: 24px;
-      }
-
-      .steps {
-        display: flex;
-        flex-direction: column;
-        gap: 16px;
-      }
-
-      .step {
-        display: flex;
-        align-items: flex-start;
-        gap: 16px;
-      }
-
-      .step-number {
-        font-family: "Space Mono", monospace;
-        font-size: 12px;
-        font-weight: 700;
+      .success-message svg {
         color: var(--accent);
-        background: rgba(34, 197, 94, 0.1);
-        width: 28px;
-        height: 28px;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        flex-shrink: 0;
-      }
-
-      .step-text {
-        font-size: 15px;
-        color: var(--text-muted);
-        padding-top: 4px;
-      }
-
-      .active-invoices {
-        margin-top: 48px;
-      }
-
-      .active-invoices h2 {
-        font-size: 13px;
-        font-weight: 600;
-        color: var(--text-muted);
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
         margin-bottom: 16px;
       }
 
-      .invoice-item {
-        background: var(--card);
-        border: 1px solid var(--border);
-        border-radius: 8px;
-        padding: 20px;
-        margin-bottom: 12px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        animation: slideIn 0.3s ease;
+      .success-message h3 {
+        font-size: 20px;
+        margin-bottom: 8px;
       }
 
-      @keyframes slideIn {
-        from {
-          opacity: 0;
-          transform: translateY(-10px);
-        }
-        to {
-          opacity: 1;
-          transform: translateY(0);
-        }
-      }
-
-      .invoice-info {
-        flex: 1;
-      }
-
-      .invoice-client {
-        font-weight: 600;
-        font-size: 16px;
-        margin-bottom: 4px;
-      }
-
-      .invoice-details {
-        font-size: 14px;
+      .success-message p {
         color: var(--text-muted);
       }
 
-      .invoice-amount {
-        font-family: "Space Mono", monospace;
-        font-weight: 700;
-        color: var(--accent);
-      }
-
-      .invoice-status {
-        display: flex;
-        align-items: center;
-        gap: 16px;
-      }
-
-      .chase-count {
-        font-size: 13px;
-        color: var(--text-muted);
-      }
-
-      .chase-count span {
-        color: var(--warning);
-        font-weight: 600;
-      }
-
-      .btn-stop {
-        padding: 8px 16px;
-        background: transparent;
-        color: var(--danger);
-        border: 1px solid var(--danger);
-        border-radius: 6px;
-        font-family: inherit;
-        font-size: 13px;
-        font-weight: 600;
-        cursor: pointer;
-        transition: background 0.2s;
-      }
-
-      .btn-stop:hover {
+      .error-message {
         background: rgba(239, 68, 68, 0.1);
+        border: 1px solid var(--danger);
+        color: var(--danger);
+        padding: 12px 16px;
+        border-radius: 8px;
+        font-size: 14px;
+        margin-bottom: 16px;
+        display: none;
       }
 
-      .btn-paid {
-        padding: 8px 16px;
-        background: transparent;
-        color: var(--accent);
-        border: 1px solid var(--accent);
-        border-radius: 6px;
-        font-family: inherit;
-        font-size: 13px;
-        font-weight: 600;
-        cursor: pointer;
-        transition: background 0.2s;
-        margin-right: 8px;
+      .error-message.show {
+        display: block;
       }
 
-      .btn-paid:hover {
-        background: rgba(34, 197, 94, 0.1);
-      }
-
-      .empty-state {
+      footer {
+        margin-top: 64px;
         text-align: center;
-        padding: 40px 20px;
         color: var(--text-muted);
-        font-size: 15px;
+        font-size: 13px;
+      }
+
+      footer a {
+        color: var(--accent);
+        text-decoration: none;
       }
 
       .success-toast {
@@ -347,218 +423,238 @@
         }
       }
 
-      .preview-section {
-        margin-top: 24px;
-        padding-top: 24px;
-        border-top: 1px solid var(--border);
-      }
-
-      .preview-toggle {
-        font-size: 14px;
-        color: var(--text-muted);
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-      }
-
-      .preview-toggle:hover {
-        color: var(--text);
-      }
-
-      .preview-content {
-        margin-top: 16px;
-        padding: 20px;
-        background: var(--bg);
-        border-radius: 8px;
-        font-size: 14px;
-        line-height: 1.7;
-        color: var(--text-muted);
-        display: none;
-      }
-
-      .preview-content.show {
-        display: block;
-      }
-
-      .preview-content p {
-        margin-bottom: 12px;
-      }
-
-      .preview-content p:last-child {
-        margin-bottom: 0;
-      }
-
-      footer {
-        margin-top: 64px;
-        text-align: center;
-        color: var(--text-muted);
-        font-size: 13px;
-      }
-
-      footer a {
-        color: var(--accent);
-        text-decoration: none;
-      }
-
       @media (max-width: 500px) {
         h1 {
-          font-size: 32px;
+          font-size: 36px;
         }
 
-        .row {
-          grid-template-columns: 1fr;
-        }
-
-        .invoice-item {
+        .hero-cta {
           flex-direction: column;
-          align-items: flex-start;
-          gap: 16px;
         }
 
-        .invoice-status {
-          width: 100%;
-          justify-content: space-between;
+        .nav {
+          flex-direction: column;
+          gap: 20px;
+        }
+
+        .step {
+          flex-direction: column;
+          text-align: center;
+        }
+
+        .step-number {
+          margin: 0 auto;
         }
       }
     </style>
   </head>
   <body>
     <div class="container">
-      <header>
+      <nav class="nav">
         <div class="logo">Invoice Chaser</div>
+        <a href="/api/auth/google" class="btn-signin">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path
+              fill="#4285F4"
+              d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
+            />
+            <path
+              fill="#34A853"
+              d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
+            />
+            <path
+              fill="#FBBC05"
+              d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"
+            />
+            <path
+              fill="#EA4335"
+              d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
+            />
+          </svg>
+          Sign in with Google
+        </a>
+      </nav>
+
+      <header class="hero">
         <h1>Get paid without the awkward emails.</h1>
         <p class="subtitle">
-          Add an invoice. We send polite follow-ups every 3 days until you get
-          your money.
+          Add an unpaid invoice. We send polite, professional follow-ups every 3
+          days until you get your money. No more uncomfortable conversations.
         </p>
+        <div class="hero-cta">
+          <a href="/api/auth/google" class="btn">Get Started Free</a>
+          <a href="#try-it" class="btn btn-outline">See it in action</a>
+        </div>
       </header>
 
-      <div class="card">
-        <form id="invoiceForm">
-          <div class="form-group">
-            <label>Client Email</label>
-            <input
-              type="email"
-              id="clientEmail"
-              placeholder="client@company.com"
-              required
-            />
-          </div>
-
-          <div class="form-group">
-            <label>Client Name</label>
-            <input
-              type="text"
-              id="clientName"
-              placeholder="John Smith"
-              required
-            />
-          </div>
-
-          <div class="row">
-            <div class="form-group">
-              <label>Invoice Amount</label>
-              <input
-                type="text"
-                id="invoiceAmount"
-                placeholder="$5,000"
-                required
-              />
-            </div>
-            <div class="form-group">
-              <label>Invoice Number</label>
-              <input
-                type="text"
-                id="invoiceNumber"
-                placeholder="INV-001"
-                required
-              />
+      <section class="section">
+        <h2 class="section-title">How it works</h2>
+        <div class="how-it-works">
+          <div class="step">
+            <div class="step-number">1</div>
+            <div class="step-content">
+              <h3>Add your invoice</h3>
+              <p>
+                Enter your client's details and the outstanding amount. Takes 30
+                seconds.
+              </p>
             </div>
           </div>
-
-          <div class="form-group">
-            <label>Your Name</label>
-            <input type="text" id="yourName" placeholder="Your name" required />
+          <div class="step">
+            <div class="step-number">2</div>
+            <div class="step-content">
+              <h3>We handle the follow-ups</h3>
+              <p>
+                We send a polite email immediately, then continue every 3 days.
+                Each email gets progressively firmer but stays professional.
+              </p>
+            </div>
           </div>
-
-          <div class="form-group">
-            <label>Your Email</label>
-            <input
-              type="email"
-              id="yourEmail"
-              placeholder="you@company.com"
-              required
-            />
+          <div class="step">
+            <div class="step-number">3</div>
+            <div class="step-content">
+              <h3>Mark as paid when done</h3>
+              <p>
+                Once the money hits your account, click "Got Paid" and we stop.
+                Simple as that.
+              </p>
+            </div>
           </div>
+        </div>
+      </section>
 
-          <div class="preview-section">
-            <div class="preview-toggle" onclick="togglePreview()">
+      <section class="section">
+        <h2 class="section-title">Pricing</h2>
+        <div class="pricing-card">
+          <div class="pricing-badge">Early Access</div>
+          <div class="pricing-price">$0 <span>/ forever</span></div>
+          <p class="pricing-description">
+            Free while we're building. Pricing will be introduced later.
+          </p>
+          <div class="pricing-features">
+            <div class="pricing-feature">
               <svg
-                width="16"
-                height="16"
+                width="20"
+                height="20"
                 viewBox="0 0 24 24"
                 fill="none"
                 stroke="currentColor"
                 stroke-width="2"
               >
-                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-                <circle cx="12" cy="12" r="3"></circle>
+                <polyline points="20 6 9 17 4 12"></polyline>
               </svg>
-              Preview email template
+              Unlimited invoice reminders
             </div>
-            <div class="preview-content" id="previewContent">
-              <p>Hi <strong>[Client Name]</strong>,</p>
-              <p>
-                I hope you're doing well. I wanted to follow up on invoice
-                <strong>[Invoice #]</strong> for <strong>[Amount]</strong>,
-                which appears to still be outstanding.
-              </p>
-              <p>
-                I understand things get busy, so I just wanted to send a
-                friendly reminder. Please let me know if you have any questions
-                or if there's anything I can help with to process this payment.
-              </p>
-              <p>Thanks so much,<br /><strong>[Your Name]</strong></p>
+            <div class="pricing-feature">
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+              Automatic follow-ups every 3 days
             </div>
+            <div class="pricing-feature">
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+              Professional email templates
+            </div>
+            <div class="pricing-feature">
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+              Dashboard to track all invoices
+            </div>
+          </div>
+          <a href="/api/auth/google" class="btn btn-full">Get Started Free</a>
+        </div>
+      </section>
+
+      <section class="section" id="try-it">
+        <h2 class="section-title">Try it free</h2>
+        <div class="card">
+          <div id="testEmailForm">
+            <h3 class="try-it-title">See a sample email</h3>
+            <p class="try-it-subtitle">
+              Enter your email and we'll send you an example of what your
+              clients will receive.
+            </p>
+
+            <div class="error-message" id="errorMessage"></div>
+
+            <form id="tryItForm">
+              <div class="form-group">
+                <label>Your Email</label>
+                <input
+                  type="email"
+                  id="testEmail"
+                  placeholder="you@example.com"
+                  required
+                />
+              </div>
+
+              <!-- Honeypot field - hidden from real users -->
+              <div class="honeypot" aria-hidden="true">
+                <label for="website">Website</label>
+                <input
+                  type="text"
+                  id="website"
+                  name="website"
+                  tabindex="-1"
+                  autocomplete="off"
+                />
+              </div>
+
+              <div class="form-group">
+                <button type="submit" class="btn btn-full" id="testEmailBtn">
+                  Send Sample Email
+                </button>
+              </div>
+            </form>
           </div>
 
-          <div class="form-group" style="margin-top: 24px">
-            <button type="submit" class="btn" id="submitBtn">
-              Start Chasing
-            </button>
-          </div>
-        </form>
-      </div>
-
-      <div class="how-it-works">
-        <h2>How it works</h2>
-        <div class="steps">
-          <div class="step">
-            <div class="step-number">1</div>
-            <div class="step-text">Add your unpaid invoice details above</div>
-          </div>
-          <div class="step">
-            <div class="step-number">2</div>
-            <div class="step-text">
-              We send a polite follow-up email immediately, then every 3 days
-            </div>
-          </div>
-          <div class="step">
-            <div class="step-number">3</div>
-            <div class="step-text">
-              Click "Got Paid" when the money lands and we stop
+          <div class="success-message" id="successMessage">
+            <svg
+              width="48"
+              height="48"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <circle cx="12" cy="12" r="10"></circle>
+              <polyline points="16 10 10.5 15.5 8 13"></polyline>
+            </svg>
+            <h3>Check your inbox!</h3>
+            <p>
+              We've sent a sample follow-up email to your address. Like what you
+              see? Sign up to start chasing your invoices.
+            </p>
+            <div style="margin-top: 20px">
+              <a href="/api/auth/google" class="btn">Get Started Free</a>
             </div>
           </div>
         </div>
-      </div>
-
-      <div class="active-invoices" id="activeInvoices">
-        <h2>Active Chases</h2>
-        <div id="invoiceList">
-          <div class="empty-state">Loading...</div>
-        </div>
-      </div>
+      </section>
 
       <footer>
         <p>
@@ -568,154 +664,79 @@
       </footer>
     </div>
 
-    <div class="success-toast" id="toast">Invoice added! First email sent.</div>
+    <div class="success-toast" id="toast"></div>
 
     <script>
-      const API = "/api";
-
-      async function fetchInvoices() {
+      // Check if user is already logged in
+      async function checkAuth() {
         try {
-          const res = await fetch(`${API}/invoices`);
-          const invoices = await res.json();
-          renderInvoices(invoices);
+          const res = await fetch("/api/auth/me");
+          const data = await res.json();
+          if (data.authenticated) {
+            window.location.href = "/dashboard.html";
+          }
         } catch (err) {
-          console.error(err);
-          renderInvoices([]);
+          // Not logged in, stay on landing page
         }
       }
 
-      function renderInvoices(invoices) {
-        const list = document.getElementById("invoiceList");
+      checkAuth();
 
-        if (!invoices || invoices.length === 0) {
-          list.innerHTML =
-            '<div class="empty-state">No active invoices. Add one above to start chasing.</div>';
-          return;
-        }
-
-        list.innerHTML = invoices
-          .map(
-            (inv) => `
-                <div class="invoice-item">
-                    <div class="invoice-info">
-                        <div class="invoice-client">${inv.client_name}</div>
-                        <div class="invoice-details">
-                            <span class="invoice-amount">${inv.amount}</span> · ${inv.invoice_number} · ${inv.client_email}
-                        </div>
-                    </div>
-                    <div class="invoice-status">
-                        <div class="chase-count"><span>${inv.chase_count}</span> emails sent</div>
-                        <button class="btn-paid" onclick="markPaid('${inv.id}')">Got Paid</button>
-                        <button class="btn-stop" onclick="stopChasing('${inv.id}')">Stop</button>
-                    </div>
-                </div>
-            `
-          )
-          .join("");
-      }
-
-      function showToast(message) {
-        const toast = document.getElementById("toast");
-        toast.textContent = message;
-        toast.style.display = "block";
-        setTimeout(() => {
-          toast.style.display = "none";
-        }, 3000);
-      }
-
-      function togglePreview() {
-        const content = document.getElementById("previewContent");
-        content.classList.toggle("show");
-      }
-
-      function updatePreview() {
-        const clientName = document.getElementById("clientName").value || "[Client Name]";
-        const invoiceNumber = document.getElementById("invoiceNumber").value || "[Invoice #]";
-        const amount = document.getElementById("invoiceAmount").value || "[Amount]";
-        const yourName = document.getElementById("yourName").value || "[Your Name]";
-
-        const previewContent = document.getElementById("previewContent");
-        previewContent.innerHTML = `
-          <p>Hi <strong>${clientName}</strong>,</p>
-          <p>
-            I hope you're doing well. I wanted to follow up on invoice
-            <strong>${invoiceNumber}</strong> for <strong>${amount}</strong>,
-            which appears to still be outstanding.
-          </p>
-          <p>
-            I understand things get busy, so I just wanted to send a
-            friendly reminder. Please let me know if you have any questions
-            or if there's anything I can help with to process this payment.
-          </p>
-          <p>Thanks so much,<br /><strong>${yourName}</strong></p>
-        `;
-      }
-
-      // Add event listeners to update preview in real-time
-      document.getElementById("clientName").addEventListener("input", updatePreview);
-      document.getElementById("invoiceNumber").addEventListener("input", updatePreview);
-      document.getElementById("invoiceAmount").addEventListener("input", updatePreview);
-      document.getElementById("yourName").addEventListener("input", updatePreview);
-
+      // Handle test email form
       document
-        .getElementById("invoiceForm")
+        .getElementById("tryItForm")
         .addEventListener("submit", async function (e) {
           e.preventDefault();
 
-          const btn = document.getElementById("submitBtn");
+          const btn = document.getElementById("testEmailBtn");
+          const errorEl = document.getElementById("errorMessage");
+          const formEl = document.getElementById("testEmailForm");
+          const successEl = document.getElementById("successMessage");
+
           btn.disabled = true;
           btn.textContent = "Sending...";
+          errorEl.classList.remove("show");
 
-          const invoice = {
-            clientEmail: document.getElementById("clientEmail").value,
-            clientName: document.getElementById("clientName").value,
-            amount: document.getElementById("invoiceAmount").value,
-            invoiceNumber: document.getElementById("invoiceNumber").value,
-            yourName: document.getElementById("yourName").value,
-            yourEmail: document.getElementById("yourEmail").value,
-          };
+          const email = document.getElementById("testEmail").value;
+          const website = document.getElementById("website").value; // Honeypot
 
           try {
-            const res = await fetch(`${API}/invoices`, {
+            const res = await fetch("/api/test-email", {
               method: "POST",
               headers: { "Content-Type": "application/json" },
-              body: JSON.stringify(invoice),
+              body: JSON.stringify({ email, website }),
             });
 
-            if (!res.ok) throw new Error("Failed");
+            const data = await res.json();
 
-            this.reset();
-            fetchInvoices();
-            showToast("Invoice added! First email sent.");
+            if (!res.ok) {
+              throw new Error(data.error || "Failed to send email");
+            }
+
+            // Show success state
+            formEl.style.display = "none";
+            successEl.classList.add("show");
           } catch (err) {
-            showToast("Failed to send. Please check your settings.");
-          } finally {
+            errorEl.textContent = err.message;
+            errorEl.classList.add("show");
             btn.disabled = false;
-            btn.textContent = "Start Chasing";
+            btn.textContent = "Send Sample Email";
           }
         });
 
-      async function markPaid(id) {
-        try {
-          await fetch(`${API}/invoices/${id}/paid`, { method: "POST" });
-          fetchInvoices();
-          showToast("Marked as paid.");
-        } catch (err) {
-          showToast("Something went wrong.");
-        }
+      // Check for auth errors in URL
+      const urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.get("error") === "auth_failed") {
+        const toast = document.getElementById("toast");
+        toast.textContent = "Authentication failed. Please try again.";
+        toast.style.display = "block";
+        toast.style.background = "#ef4444";
+        setTimeout(() => {
+          toast.style.display = "none";
+        }, 4000);
+        // Clean up URL
+        window.history.replaceState({}, document.title, "/");
       }
-
-      async function stopChasing(id) {
-        try {
-          await fetch(`${API}/invoices/${id}/stop`, { method: "POST" });
-          fetchInvoices();
-          showToast("Stopped chasing.");
-        } catch (err) {
-          showToast("Something went wrong.");
-        }
-      }
-
-      fetchInvoices();
     </script>
   </body>
 </html>
