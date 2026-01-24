@@ -15,6 +15,7 @@ const db = createClient({
 const GOOGLE_CLIENT_ID = Deno.env.get("GOOGLE_CLIENT_ID") || "";
 const GOOGLE_CLIENT_SECRET = Deno.env.get("GOOGLE_CLIENT_SECRET") || "";
 const APP_URL = Deno.env.get("APP_URL") || "http://localhost:8000";
+console.log("APP_URL", APP_URL);
 const SESSION_SECRET =
   Deno.env.get("SESSION_SECRET") || "change-this-secret-in-production";
 
