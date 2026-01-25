@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Dashboard — Invoice Chaser</title>
+    <title>Dashboard — InvoiceChaser by hndshake</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -58,6 +58,16 @@
         color: var(--accent);
         text-transform: uppercase;
         text-decoration: none;
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+      }
+
+      .logo-tagline {
+        font-size: 10px;
+        color: var(--text-muted);
+        font-weight: 400;
+        letter-spacing: 0.1em;
       }
 
       .btn-logout {
@@ -461,7 +471,10 @@
   <body>
     <div class="container">
       <nav class="nav">
-        <a href="/" class="logo">Invoice Chaser</a>
+        <a href="/" class="logo">
+          <span>InvoiceChaser</span>
+          <span class="logo-tagline">by hndshake</span>
+        </a>
         <button class="btn-logout" onclick="logout()">Sign Out</button>
       </nav>
 
@@ -595,8 +608,7 @@
 
         <footer>
           <p>
-            Built by <a href="#">Jyron</a> — because asking for money should not
-            be awkward.
+            <a href="https://hndshake.com">InvoiceChaser by hndshake.com</a> — Built by Jyron — because asking for money should not be awkward.
           </p>
         </footer>
       </div>

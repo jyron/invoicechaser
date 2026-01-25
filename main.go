@@ -467,7 +467,52 @@ func recordRateLimit(ipAddress, action string) {
 }
 
 // Email functions
-func generateEmail(invoice *Invoice) (string, string) {
+func generateHTMLEmail(clientName, invoiceNumber, amount, yourName, messageBody string) string {
+	return fmt.Sprintf(`<!DOCTYPE html>
+<html>
+<body style="margin:0; padding:0; background:#f5f5f5; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
+  <div style="max-width:600px; margin:40px auto; background:#ffffff; border-radius:8px; overflow:hidden;">
+    
+    <!-- Main Content -->
+    <div style="padding:40px;">
+      <p style="margin:0 0 20px; color:#333; font-size:16px; line-height:1.6;">
+        Hi <strong>%s</strong>,
+      </p>
+      
+      <p style="margin:0 0 20px; color:#333; font-size:16px; line-height:1.6;">
+        %s
+      </p>
+      
+      <!-- Invoice Details Box -->
+      <div style="background:#f9fafb; border:1px solid #e5e7eb; border-radius:8px; padding:20px; margin:24px 0;">
+        <div style="color:#6b7280; font-size:12px; text-transform:uppercase; letter-spacing:0.05em; margin-bottom:12px;">
+          Invoice Details
+        </div>
+        <div style="color:#111; font-size:16px; line-height:1.8;">
+          <strong>Invoice #:</strong> %s<br>
+          <strong>Amount:</strong> $%s
+        </div>
+      </div>
+      
+      <p style="margin:24px 0 0; color:#333; font-size:16px; line-height:1.6;">
+        Thanks,<br>
+        <strong>%s</strong>
+      </p>
+    </div>
+    
+    <!-- Viral Footer -->
+    <div style="border-top:1px solid #e5e7eb; padding:24px 40px; background:#fafafa;">
+      <p style="margin:0; color:#9ca3af; font-size:13px; text-align:center;">
+        Need to collect invoices? Try <a href="https://hndshake.com" style="color:#22c55e; text-decoration:none; font-weight:600;">InvoiceChaser</a> at hndshake.com
+      </p>
+    </div>
+    
+  </div>
+</body>
+</html>`, clientName, messageBody, invoiceNumber, amount, yourName)
+}
+
+func generateEmail(invoice *Invoice) (string, string, string) {
 	subjects := []string{
 		fmt.Sprintf("Following up on Invoice %s", invoice.InvoiceNumber),
 		fmt.Sprintf("Friendly reminder: Invoice %s", invoice.InvoiceNumber),
@@ -482,58 +527,52 @@ func generateEmail(invoice *Invoice) (string, string) {
 	}
 	subject := subjects[idx]
 
-	var body string
+	var messageBody string
 	switch invoice.ChaseCount {
 	case 1:
-		body = fmt.Sprintf(`Hi %s,
-
-I hope you're doing well. I wanted to follow up on invoice %s for $%s, which appears to still be outstanding.
-
-I understand things get busy, so I just wanted to send a friendly reminder. Please let me know if you have any questions or if there's anything I can help with to process this payment.
-
-Thanks so much,
-%s`, invoice.ClientName, invoice.InvoiceNumber, invoice.Amount, invoice.YourName)
+		messageBody = "I hope you're doing well. I wanted to follow up on this invoice, which appears to still be outstanding.<br><br>I understand things get busy, so I just wanted to send a friendly reminder. Please let me know if you have any questions or if there's anything I can help with to process this payment."
 	case 2:
-		body = fmt.Sprintf(`Hi %s,
-
-Just wanted to check in again on invoice %s for $%s. I sent a note a few days ago but wanted to make sure it didn't slip through the cracks.
-
-If there are any issues with the invoice or payment, I'm happy to help sort them out.
-
-Best,
-%s`, invoice.ClientName, invoice.InvoiceNumber, invoice.Amount, invoice.YourName)
+		messageBody = "Just wanted to check in again on this invoice. I sent a note a few days ago but wanted to make sure it didn't slip through the cracks.<br><br>If there are any issues with the invoice or payment, I'm happy to help sort them out."
 	case 3:
-		body = fmt.Sprintf(`Hi %s,
-
-I'm following up once more on invoice %s for $%s. This is the third time I've reached out, so I want to make sure everything is okay on your end.
-
-If there's a problem with the invoice or you need different payment terms, please let me know and we can work something out.
-
-Thanks,
-%s`, invoice.ClientName, invoice.InvoiceNumber, invoice.Amount, invoice.YourName)
+		messageBody = "I'm following up once more on this invoice. This is the third time I've reached out, so I want to make sure everything is okay on your end.<br><br>If there's a problem with the invoice or you need different payment terms, please let me know and we can work something out."
 	default:
-		body = fmt.Sprintf(`Hi %s,
-
-I've reached out several times now about invoice %s for $%s and haven't heard back. I'd really appreciate an update on when I can expect payment.
-
-If there's an issue I'm not aware of, please let me know so we can resolve it.
-
-Thank you,
-%s`, invoice.ClientName, invoice.InvoiceNumber, invoice.Amount, invoice.YourName)
+		messageBody = "I've reached out several times now about this invoice and haven't heard back. I'd really appreciate an update on when I can expect payment.<br><br>If there's an issue I'm not aware of, please let me know so we can resolve it."
 	}
 
-	return subject, body
+	htmlBody := generateHTMLEmail(invoice.ClientName, invoice.InvoiceNumber, invoice.Amount, invoice.YourName, messageBody)
+	
+	// Plain text fallback
+	plainText := fmt.Sprintf(`Hi %s,
+
+%s
+
+Invoice #: %s
+Amount: $%s
+
+Thanks,
+%s
+
+---
+Need to collect invoices? Try InvoiceChaser at hndshake.com`, 
+		invoice.ClientName, 
+		strings.ReplaceAll(messageBody, "<br>", "\n"),
+		invoice.InvoiceNumber,
+		invoice.Amount,
+		invoice.YourName)
+
+	return subject, htmlBody, plainText
 }
 
 func sendEmail(invoice *Invoice) error {
-	subject, body := generateEmail(invoice)
+	subject, htmlBody, plainText := generateEmail(invoice)
 
 	payload := map[string]interface{}{
 		"from":     fmt.Sprintf("%s <%s>", invoice.YourName, fromEmail),
 		"to":       invoice.ClientEmail,
 		"reply_to": invoice.YourEmail,
 		"subject":  subject,
-		"text":     body,
+		"html":     htmlBody,
+		"text":     plainText,
 	}
 
 	jsonPayload, _ := json.Marshal(payload)
@@ -556,38 +595,44 @@ func sendEmail(invoice *Invoice) error {
 }
 
 func sendTestEmail(email string) error {
-	subject := "Invoice Chaser - Sample Follow-up Email"
-	body := fmt.Sprintf(`Hi there,
+	subject := "InvoiceChaser - Sample Follow-up Email"
+	
+	messageBody := "This is a sample follow-up email from InvoiceChaser!<br><br>When you use InvoiceChaser, your clients will receive professionally written emails like this one, reminding them about outstanding invoices.<br><br>The email below shows what a real follow-up looks like - clean, professional, and personal."
+	
+	htmlBody := generateHTMLEmail("Sample Client", "INV-001", "5,000", "Your Name", messageBody)
+	
+	plainText := fmt.Sprintf(`Hi there,
 
-This is a sample follow-up email from Invoice Chaser!
+This is a sample follow-up email from InvoiceChaser!
 
-When you use Invoice Chaser, your clients will receive professionally written emails like this one, reminding them about outstanding invoices.
+When you use InvoiceChaser, your clients will receive professionally written emails like this one, reminding them about outstanding invoices.
 
 Here's what a real follow-up might look like:
 
 ---
 
-Hi [Client Name],
+Hi Sample Client,
 
 I hope you're doing well. I wanted to follow up on invoice INV-001 for $5,000, which appears to still be outstanding.
 
 I understand things get busy, so I just wanted to send a friendly reminder. Please let me know if you have any questions or if there's anything I can help with to process this payment.
 
 Thanks so much,
-[Your Name]
+Your Name
 
 ---
 
 Ready to get paid? Sign up at %s and start chasing those invoices!
 
 Best,
-The Invoice Chaser Team`, frontendURL)
+The InvoiceChaser Team`, frontendURL)
 
 	payload := map[string]interface{}{
-		"from":    fmt.Sprintf("Invoice Chaser <%s>", fromEmail),
+		"from":    fmt.Sprintf("InvoiceChaser <%s>", fromEmail),
 		"to":      email,
 		"subject": subject,
-		"text":    body,
+		"html":    htmlBody,
+		"text":    plainText,
 	}
 
 	jsonPayload, _ := json.Marshal(payload)
