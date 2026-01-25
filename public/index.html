@@ -4,6 +4,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>InvoiceChaser by hndshake — Get Paid Without the Awkward Emails</title>
+    <link rel="icon" type="image/png" href="/paperchaserlogo.png" />
+    <link rel="apple-touch-icon" href="/paperchaserlogo.png" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -55,6 +57,19 @@
       }
 
       .logo {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        text-decoration: none;
+      }
+
+      .logo-icon {
+        width: 40px;
+        height: 40px;
+        object-fit: contain;
+      }
+
+      .logo-text {
         font-family: "Space Mono", monospace;
         font-size: 14px;
         font-weight: 700;
@@ -462,8 +477,11 @@
     <div class="container">
       <nav class="nav">
         <div class="logo">
-          <span>InvoiceChaser</span>
-          <span class="logo-tagline">by hndshake</span>
+          <img src="/paperchaserlogo.png" alt="InvoiceChaser" class="logo-icon" />
+          <div class="logo-text">
+            <span>InvoiceChaser</span>
+            <span class="logo-tagline">by hndshake</span>
+          </div>
         </div>
         <a class="btn-signin auth-link" href="/api/auth/google">
           <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
