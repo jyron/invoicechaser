@@ -113,6 +113,36 @@
         gap: 16px;
       }
 
+      .stats-summary {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 24px;
+        margin-bottom: 32px;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 24px;
+      }
+
+      .stat-item {
+        text-align: center;
+      }
+
+      .stat-value {
+        font-size: 32px;
+        font-weight: 700;
+        color: var(--accent);
+        font-family: "Space Mono", monospace;
+        margin-bottom: 4px;
+      }
+
+      .stat-label {
+        font-size: 13px;
+        color: var(--text-muted);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+      }
+
       .user-avatar {
         width: 48px;
         height: 48px;
@@ -300,13 +330,72 @@
         margin-top: 48px;
       }
 
+      .section-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 16px;
+      }
+
       .active-invoices h2 {
         font-size: 13px;
         font-weight: 600;
         color: var(--text-muted);
         text-transform: uppercase;
         letter-spacing: 0.05em;
-        margin-bottom: 16px;
+        margin: 0;
+      }
+
+      .tab-toggle {
+        display: flex;
+        gap: 8px;
+      }
+
+      .tab-btn {
+        padding: 8px 16px;
+        background: transparent;
+        color: var(--text-muted);
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        font-family: inherit;
+        font-size: 13px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+
+      .tab-btn:hover {
+        border-color: var(--text-muted);
+      }
+
+      .tab-btn.active {
+        background: var(--accent);
+        color: #000;
+        border-color: var(--accent);
+      }
+
+      .invoice-item.history {
+        opacity: 0.7;
+      }
+
+      .invoice-badge {
+        display: inline-block;
+        padding: 4px 12px;
+        border-radius: 12px;
+        font-size: 12px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+      }
+
+      .badge-paid {
+        background: rgba(34, 197, 94, 0.1);
+        color: var(--accent);
+      }
+
+      .badge-stopped {
+        background: rgba(239, 68, 68, 0.1);
+        color: var(--danger);
       }
 
       .invoice-item {
@@ -351,6 +440,18 @@
         font-family: "Space Mono", monospace;
         font-weight: 700;
         color: var(--accent);
+      }
+
+      .invoice-timeline {
+        font-size: 13px;
+        color: var(--text-muted);
+        margin-top: 8px;
+        padding-top: 8px;
+        border-top: 1px solid var(--border);
+      }
+
+      .invoice-timeline span {
+        margin-right: 12px;
       }
 
       .invoice-status {
@@ -455,6 +556,137 @@
         text-decoration: none;
       }
 
+      .modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.8);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        z-index: 1000;
+        animation: fadeIn 0.3s ease;
+      }
+
+      .modal-overlay.show {
+        display: flex;
+      }
+
+      .modal {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        padding: 40px;
+        max-width: 500px;
+        width: 90%;
+        text-align: center;
+        position: relative;
+        animation: slideUp 0.3s ease;
+      }
+
+      @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+      }
+
+      @keyframes slideUp {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .modal-close {
+        position: absolute;
+        top: 16px;
+        right: 16px;
+        background: transparent;
+        border: none;
+        color: var(--text-muted);
+        font-size: 24px;
+        cursor: pointer;
+        padding: 4px 8px;
+        line-height: 1;
+      }
+
+      .modal-close:hover {
+        color: var(--text);
+      }
+
+      .celebration-icon {
+        font-size: 64px;
+        margin-bottom: 16px;
+      }
+
+      .modal h2 {
+        font-size: 28px;
+        margin-bottom: 12px;
+      }
+
+      .modal p {
+        color: var(--text-muted);
+        margin-bottom: 24px;
+        font-size: 16px;
+      }
+
+      .modal-actions {
+        display: flex;
+        gap: 12px;
+        justify-content: center;
+      }
+
+      .btn-twitter {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 14px 24px;
+        background: #1DA1F2;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-family: inherit;
+        font-size: 15px;
+        font-weight: 600;
+        cursor: pointer;
+        text-decoration: none;
+        transition: background 0.2s;
+      }
+
+      .btn-twitter:hover {
+        background: #1a8cd8;
+      }
+
+      .btn-secondary {
+        padding: 14px 24px;
+        background: transparent;
+        color: var(--text);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        font-family: inherit;
+        font-size: 15px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background 0.2s;
+      }
+
+      .btn-secondary:hover {
+        background: var(--border);
+      }
+
+      .confirmation-modal .modal {
+        max-width: 400px;
+      }
+
+      .confirmation-modal .modal-actions {
+        margin-top: 24px;
+      }
+
       @media (max-width: 500px) {
         h1 {
           font-size: 28px;
@@ -478,6 +710,19 @@
         .user-info {
           flex-direction: column;
           text-align: center;
+        }
+
+        .stats-summary {
+          grid-template-columns: 1fr;
+          gap: 16px;
+        }
+
+        .modal {
+          padding: 32px 24px;
+        }
+
+        .modal-actions {
+          flex-direction: column;
         }
       }
     </style>
@@ -503,6 +748,21 @@
           <div class="user-details">
             <div class="user-name" id="userName">Loading...</div>
             <div class="user-email" id="userEmail">Loading...</div>
+          </div>
+        </div>
+
+        <div class="stats-summary" id="statsSummary" style="display: none;">
+          <div class="stat-item">
+            <div class="stat-value" id="statInvoices">0</div>
+            <div class="stat-label">Active Invoices</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-value" id="statAmount">$0</div>
+            <div class="stat-label">Outstanding</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-value" id="statEmails">0</div>
+            <div class="stat-label">Emails Sent</div>
           </div>
         </div>
 
@@ -617,7 +877,13 @@
         </div>
 
         <div class="active-invoices" id="activeInvoices">
-          <h2>Active Chases</h2>
+          <div class="section-header">
+            <h2 id="sectionTitle">Active Chases</h2>
+            <div class="tab-toggle">
+              <button class="tab-btn active" onclick="showTab('active')">Active</button>
+              <button class="tab-btn" onclick="showTab('history')">History</button>
+            </div>
+          </div>
           <div id="invoiceList">
             <div class="empty-state">Loading...</div>
           </div>
@@ -633,11 +899,44 @@
 
     <div class="success-toast" id="toast">Invoice added! First email sent.</div>
 
+    <!-- Celebration Modal -->
+    <div class="modal-overlay" id="celebrationModal">
+      <div class="modal">
+        <button class="modal-close" onclick="closeCelebrationModal()">×</button>
+        <div class="celebration-icon">🎉</div>
+        <h2>You Got Paid!</h2>
+        <p id="celebrationAmount">You collected $5,000</p>
+        <div class="modal-actions">
+          <a href="#" id="twitterShareBtn" class="btn-twitter" target="_blank">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/>
+            </svg>
+            Share on Twitter
+          </a>
+          <button class="btn-secondary" onclick="closeCelebrationModal()">Close</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Confirmation Modal -->
+    <div class="modal-overlay confirmation-modal" id="confirmationModal">
+      <div class="modal">
+        <h2 id="confirmTitle">Confirm Action</h2>
+        <p id="confirmMessage">Are you sure?</p>
+        <div class="modal-actions">
+          <button class="btn" id="confirmYes">Confirm</button>
+          <button class="btn-secondary" onclick="closeConfirmationModal()">Cancel</button>
+        </div>
+      </div>
+    </div>
+
     <script src="/config.js"></script>
     <script>
       const API_URL = window.API_URL || "";
       const API = API_URL + "/api";
       let currentUser = null;
+      let currentTab = 'active';
+      let allInvoices = [];
 
       async function checkAuth() {
         try {
@@ -683,56 +982,146 @@
 
       async function fetchInvoices() {
         try {
-          const res = await fetch(`${API}/invoices`, { credentials: "include" });
+          const res = await fetch(`${API}/invoices/all`, { credentials: "include" });
           if (res.status === 401) {
             window.location.href = "/";
             return;
           }
-          const invoices = await res.json();
-          renderInvoices(invoices);
+          allInvoices = await res.json();
+          renderCurrentTab();
         } catch (err) {
-          renderInvoices([]);
+          allInvoices = [];
+          renderCurrentTab();
         }
       }
 
-      function renderInvoices(invoices) {
+      function showTab(tab) {
+        currentTab = tab;
+        document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+        event.target.classList.add('active');
+        renderCurrentTab();
+      }
+
+      function renderCurrentTab() {
+        const activeInvoices = allInvoices.filter(inv => inv.status === 'active');
+        const historyInvoices = allInvoices.filter(inv => inv.status === 'paid' || inv.status === 'stopped');
+        
+        if (currentTab === 'active') {
+          document.getElementById('sectionTitle').textContent = 'Active Chases';
+          renderInvoices(activeInvoices, false);
+        } else {
+          document.getElementById('sectionTitle').textContent = 'History';
+          renderInvoices(historyInvoices, true);
+        }
+      }
+
+      function getRelativeTime(dateString) {
+        const date = new Date(dateString);
+        const now = new Date();
+        const diffMs = now - date;
+        const diffSec = Math.floor(diffMs / 1000);
+        const diffMin = Math.floor(diffSec / 60);
+        const diffHour = Math.floor(diffMin / 60);
+        const diffDay = Math.floor(diffHour / 24);
+
+        if (diffDay > 0) return `${diffDay} day${diffDay > 1 ? 's' : ''} ago`;
+        if (diffHour > 0) return `${diffHour} hour${diffHour > 1 ? 's' : ''} ago`;
+        if (diffMin > 0) return `${diffMin} minute${diffMin > 1 ? 's' : ''} ago`;
+        return 'Just now';
+      }
+
+      function getNextEmailTime(dateString) {
+        const date = new Date(dateString);
+        const now = new Date();
+        const diffMs = date - now;
+        const diffSec = Math.floor(diffMs / 1000);
+        const diffMin = Math.floor(diffSec / 60);
+        const diffHour = Math.floor(diffMin / 60);
+        const diffDay = Math.floor(diffHour / 24);
+
+        if (diffMs < 0) return 'Sending soon';
+        if (diffDay === 0) return 'Today';
+        if (diffDay === 1) return 'Tomorrow';
+        return `in ${diffDay} days`;
+      }
+
+      function updateStats(invoices) {
+        if (!invoices || invoices.length === 0) {
+          document.getElementById("statsSummary").style.display = "none";
+          return;
+        }
+
+        document.getElementById("statsSummary").style.display = "grid";
+        
+        const totalInvoices = invoices.length;
+        const totalAmount = invoices.reduce((sum, inv) => {
+          const amount = parseFloat(inv.amount.replace(/[^0-9.-]+/g, "")) || 0;
+          return sum + amount;
+        }, 0);
+        const totalEmails = invoices.reduce((sum, inv) => sum + inv.chase_count, 0);
+
+        document.getElementById("statInvoices").textContent = totalInvoices;
+        document.getElementById("statAmount").textContent = `$${totalAmount.toLocaleString()}`;
+        document.getElementById("statEmails").textContent = totalEmails;
+      }
+
+      function renderInvoices(invoices, isHistory) {
         const list = document.getElementById("invoiceList");
 
+        if (!isHistory) {
+          updateStats(invoices);
+        }
+
         if (!invoices || invoices.length === 0) {
-          list.innerHTML =
-            '<div class="empty-state">No active invoices. Add one above to start chasing.</div>';
+          const emptyMsg = isHistory 
+            ? 'No invoice history yet. Paid or stopped invoices will appear here.'
+            : 'No active invoices. Add one above to start chasing.';
+          list.innerHTML = `<div class="empty-state">${emptyMsg}</div>`;
           return;
         }
 
         list.innerHTML = invoices
           .map(
-            (inv) => `
-                <div class="invoice-item">
-                    <div class="invoice-info">
-                        <div class="invoice-client">${escapeHtml(
-                          inv.client_name
-                        )}</div>
-                        <div class="invoice-details">
-                            <span class="invoice-amount">${escapeHtml(
-                              inv.amount
-                            )}</span> · ${escapeHtml(
-              inv.invoice_number
-            )} · ${escapeHtml(inv.client_email)}
-                        </div>
-                    </div>
-                    <div class="invoice-status">
-                        <div class="chase-count"><span>${
-                          inv.chase_count
-                        }</span> emails sent</div>
-                        <button class="btn-paid" onclick="markPaid('${
-                          inv.id
-                        }')">Got Paid</button>
-                        <button class="btn-stop" onclick="stopChasing('${
-                          inv.id
-                        }')">Stop</button>
-                    </div>
+            (inv) => {
+              const statusBadge = inv.status === 'paid' 
+                ? '<span class="invoice-badge badge-paid">Paid</span>'
+                : inv.status === 'stopped'
+                ? '<span class="invoice-badge badge-stopped">Stopped</span>'
+                : '';
+              
+              const timeline = !isHistory ? `
+                <div class="invoice-timeline">
+                    <span>Last sent: ${getRelativeTime(inv.last_chase)}</span>
+                    <span>Next: ${getNextEmailTime(inv.next_chase)}</span>
                 </div>
-            `
+              ` : '';
+
+              const actions = !isHistory ? `
+                <div class="invoice-status">
+                    <div class="chase-count"><span>${inv.chase_count}</span> emails sent</div>
+                    <button class="btn-paid" onclick="markPaid('${inv.id}', '${escapeHtml(inv.amount)}')">Got Paid</button>
+                    <button class="btn-stop" onclick="stopChasing('${inv.id}')">Stop</button>
+                </div>
+              ` : `
+                <div class="invoice-status">
+                    <div class="chase-count"><span>${inv.chase_count}</span> emails sent</div>
+                    ${statusBadge}
+                </div>
+              `;
+
+              return `
+                <div class="invoice-item ${isHistory ? 'history' : ''}">
+                    <div class="invoice-info">
+                        <div class="invoice-client">${escapeHtml(inv.client_name)}</div>
+                        <div class="invoice-details">
+                            <span class="invoice-amount">$${escapeHtml(inv.amount)}</span> · ${escapeHtml(inv.invoice_number)} · ${escapeHtml(inv.client_email)}
+                        </div>
+                        ${timeline}
+                    </div>
+                    ${actions}
+                </div>
+              `;
+            }
           )
           .join("");
       }
@@ -853,38 +1242,89 @@
           }
         });
 
-      async function markPaid(id) {
-        try {
-          const res = await fetch(`${API}/invoices/${id}/paid`, {
-            method: "POST",
-            credentials: "include",
-          });
-          if (res.status === 401) {
-            window.location.href = "/";
-            return;
-          }
-          fetchInvoices();
-          showToast("Marked as paid.");
-        } catch (err) {
-          showToast("Something went wrong.", true);
+      function showCelebrationModal(amount) {
+        const modal = document.getElementById("celebrationModal");
+        const amountText = document.getElementById("celebrationAmount");
+        const twitterBtn = document.getElementById("twitterShareBtn");
+        
+        amountText.textContent = `You collected $${amount}!`;
+        
+        const tweetText = `Just collected $${amount} in overdue invoices with InvoiceChaser! 💰 No more awkward follow-up emails. hndshake.com`;
+        twitterBtn.href = `https://twitter.com/intent/tweet?text=${encodeURIComponent(tweetText)}`;
+        
+        modal.classList.add("show");
+      }
+
+      function closeCelebrationModal() {
+        document.getElementById("celebrationModal").classList.remove("show");
+      }
+
+      let confirmCallback = null;
+
+      function showConfirmation(title, message, onConfirm) {
+        const modal = document.getElementById("confirmationModal");
+        document.getElementById("confirmTitle").textContent = title;
+        document.getElementById("confirmMessage").textContent = message;
+        confirmCallback = onConfirm;
+        modal.classList.add("show");
+      }
+
+      function closeConfirmationModal() {
+        document.getElementById("confirmationModal").classList.remove("show");
+        confirmCallback = null;
+      }
+
+      document.getElementById("confirmYes").addEventListener("click", () => {
+        if (confirmCallback) {
+          confirmCallback();
+          closeConfirmationModal();
         }
+      });
+
+      async function markPaid(id, amount) {
+        showConfirmation(
+          "Mark as Paid?",
+          "We'll stop sending reminders for this invoice.",
+          async () => {
+            try {
+              const res = await fetch(`${API}/invoices/${id}/paid`, {
+                method: "POST",
+                credentials: "include",
+              });
+              if (res.status === 401) {
+                window.location.href = "/";
+                return;
+              }
+              fetchInvoices();
+              showCelebrationModal(amount);
+            } catch (err) {
+              showToast("Something went wrong.", true);
+            }
+          }
+        );
       }
 
       async function stopChasing(id) {
-        try {
-          const res = await fetch(`${API}/invoices/${id}/stop`, {
-            method: "POST",
-            credentials: "include",
-          });
-          if (res.status === 401) {
-            window.location.href = "/";
-            return;
+        showConfirmation(
+          "Stop Chasing?",
+          "You can always start chasing again by adding the invoice.",
+          async () => {
+            try {
+              const res = await fetch(`${API}/invoices/${id}/stop`, {
+                method: "POST",
+                credentials: "include",
+              });
+              if (res.status === 401) {
+                window.location.href = "/";
+                return;
+              }
+              fetchInvoices();
+              showToast("Stopped chasing.");
+            } catch (err) {
+              showToast("Something went wrong.", true);
+            }
           }
-          fetchInvoices();
-          showToast("Stopped chasing.");
-        } catch (err) {
-          showToast("Something went wrong.", true);
-        }
+        );
       }
 
       // Initialize

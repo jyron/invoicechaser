@@ -189,6 +189,8 @@ func router(w http.ResponseWriter, r *http.Request) {
 		handleTestEmail(w, r)
 	case path == "/api/invoices" && method == "GET":
 		handleGetInvoices(w, r)
+	case path == "/api/invoices/all" && method == "GET":
+		handleGetAllInvoices(w, r)
 	case path == "/api/invoices" && method == "POST":
 		handleCreateInvoice(w, r)
 	case paidRegex.MatchString(path) && method == "POST":
@@ -700,6 +702,36 @@ func handleGetInvoices(w http.ResponseWriter, r *http.Request) {
 	rows, err := db.Query(`SELECT id, user_id, client_email, client_name, amount, invoice_number, 
 		your_name, your_email, chase_count, status, created_at, next_chase, last_chase, paid_at 
 		FROM invoices WHERE status = 'active' AND user_id = ?`, user.ID)
+	if err != nil {
+		jsonResponse(w, []Invoice{}, http.StatusOK)
+		return
+	}
+	defer rows.Close()
+
+	var invoices []Invoice
+	for rows.Next() {
+		var inv Invoice
+		rows.Scan(&inv.ID, &inv.UserID, &inv.ClientEmail, &inv.ClientName, &inv.Amount, &inv.InvoiceNumber,
+			&inv.YourName, &inv.YourEmail, &inv.ChaseCount, &inv.Status, &inv.CreatedAt, &inv.NextChase, &inv.LastChase, &inv.PaidAt)
+		invoices = append(invoices, inv)
+	}
+
+	if invoices == nil {
+		invoices = []Invoice{}
+	}
+	jsonResponse(w, invoices, http.StatusOK)
+}
+
+func handleGetAllInvoices(w http.ResponseWriter, r *http.Request) {
+	user := getSessionUser(r)
+	if user == nil {
+		jsonResponse(w, map[string]string{"error": "Unauthorized"}, http.StatusUnauthorized)
+		return
+	}
+
+	rows, err := db.Query(`SELECT id, user_id, client_email, client_name, amount, invoice_number, 
+		your_name, your_email, chase_count, status, created_at, next_chase, last_chase, paid_at 
+		FROM invoices WHERE user_id = ? ORDER BY created_at DESC`, user.ID)
 	if err != nil {
 		jsonResponse(w, []Invoice{}, http.StatusOK)
 		return
