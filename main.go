@@ -505,7 +505,7 @@ func generateHTMLEmail(clientName, invoiceNumber, amount, yourName, messageBody 
     <!-- Viral Footer -->
     <div style="border-top:1px solid #e5e7eb; padding:24px 40px; background:#fafafa;">
       <p style="margin:0; color:#9ca3af; font-size:13px; text-align:center;">
-        Need to collect invoices? Try <a href="https://hndshake.com" style="color:#22c55e; text-decoration:none; font-weight:600;">InvoiceChaser</a> at hndshake.com
+        Need to collect invoices? Try <a href="https://receivables.ch" style="color:#22c55e; text-decoration:none; font-weight:600;">Receivables.ch</a>
       </p>
     </div>
     
@@ -555,7 +555,7 @@ Thanks,
 %s
 
 ---
-Need to collect invoices? Try InvoiceChaser at hndshake.com`, 
+Need to collect invoices? Try Receivables.ch`, 
 		invoice.ClientName, 
 		strings.ReplaceAll(messageBody, "<br>", "\n"),
 		invoice.InvoiceNumber,
@@ -597,17 +597,17 @@ func sendEmail(invoice *Invoice) error {
 }
 
 func sendTestEmail(email string) error {
-	subject := "InvoiceChaser - Sample Follow-up Email"
+	subject := "Receivables.ch - Sample Follow-up Email"
 	
-	messageBody := "This is a sample follow-up email from InvoiceChaser!<br><br>When you use InvoiceChaser, your clients will receive professionally written emails like this one, reminding them about outstanding invoices.<br><br>The email below shows what a real follow-up looks like - clean, professional, and personal."
+	messageBody := "This is a sample follow-up email from Receivables.ch!<br><br>When you use Receivables.ch, your clients will receive professionally written emails like this one, reminding them about outstanding invoices.<br><br>The email below shows what a real follow-up looks like - clean, professional, and personal."
 	
 	htmlBody := generateHTMLEmail("Sample Client", "INV-001", "5,000", "Your Name", messageBody)
 	
 	plainText := fmt.Sprintf(`Hi there,
 
-This is a sample follow-up email from InvoiceChaser!
+This is a sample follow-up email from Receivables.ch!
 
-When you use InvoiceChaser, your clients will receive professionally written emails like this one, reminding them about outstanding invoices.
+When you use Receivables.ch, your clients will receive professionally written emails like this one, reminding them about outstanding invoices.
 
 Here's what a real follow-up might look like:
 
@@ -627,10 +627,10 @@ Your Name
 Ready to get paid? Sign up at %s and start chasing those invoices!
 
 Best,
-The InvoiceChaser Team`, frontendURL)
+The Receivables.ch Team`, frontendURL)
 
 	payload := map[string]interface{}{
-		"from":    fmt.Sprintf("InvoiceChaser <%s>", fromEmail),
+		"from":    fmt.Sprintf("Receivables.ch <%s>", fromEmail),
 		"to":      email,
 		"subject": subject,
 		"html":    htmlBody,
