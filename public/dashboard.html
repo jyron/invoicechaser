@@ -596,9 +596,9 @@
       }
 
       .email-item-preview {
-        font-size: 13px;
-        color: var(--text-muted);
-        line-height: 1.5;
+        font-size: 14px;
+        color: var(--text);
+        line-height: 1.6;
         display: none;
       }
 
@@ -611,10 +611,30 @@
 
       .email-item-preview p {
         margin-bottom: 12px;
+        color: var(--text);
       }
 
       .email-item-preview p:last-child {
         margin-bottom: 0;
+      }
+
+      .email-item-preview strong {
+        color: var(--text);
+        font-weight: 600;
+      }
+
+      .email-item-preview div[style*="background:#f9fafb"] {
+        background: var(--bg) !important;
+        border-color: var(--border) !important;
+      }
+
+      .email-item-preview div[style*="color:#6b7280"] {
+        color: var(--text-muted) !important;
+      }
+
+      .email-item-preview div[style*="color:#111"],
+      .email-item-preview div[style*="color:#333"] {
+        color: var(--text) !important;
       }
 
       .email-history-empty {
