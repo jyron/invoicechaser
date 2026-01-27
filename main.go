@@ -869,11 +869,7 @@ func handleCreateInvoice(w http.ResponseWriter, r *http.Request) {
 		LastChase:     now.Format(time.RFC3339),
 	}
 
-	if err := sendEmail(&invoice); err != nil {
-		jsonResponse(w, map[string]string{"error": "Failed to send email"}, http.StatusInternalServerError)
-		return
-	}
-
+	// Insert invoice into database first, so foreign key constraint is satisfied
 	_, err := db.Exec(`INSERT INTO invoices (id, user_id, client_email, client_name, amount, invoice_number, 
 		your_name, your_email, chase_count, status, created_at, next_chase, last_chase) 
 		VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
@@ -883,6 +879,12 @@ func handleCreateInvoice(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		jsonResponse(w, map[string]string{"error": "Failed to create invoice"}, http.StatusInternalServerError)
 		return
+	}
+
+	// Now send the email after invoice is in database
+	if err := sendEmail(&invoice); err != nil {
+		// Email failed, but invoice is created - log the error but don't fail the request
+		fmt.Printf("Failed to send email for invoice %s: %v\n", invoice.ID, err)
 	}
 
 	jsonResponse(w, invoice, http.StatusCreated)
