@@ -53,6 +53,15 @@ type Invoice struct {
 	PaidAt        *string `json:"paid_at"`
 }
 
+type EmailLog struct {
+	ID        string `json:"id"`
+	InvoiceID string `json:"invoice_id"`
+	SentAt    string `json:"sent_at"`
+	Subject   string `json:"subject"`
+	BodyHTML  string `json:"body_html"`
+	BodyText  string `json:"body_text"`
+}
+
 type CreateInvoiceRequest struct {
 	ClientEmail   string `json:"clientEmail"`
 	ClientName    string `json:"clientName"`
@@ -159,6 +168,16 @@ func initializeDatabase() {
 		expires_at TEXT NOT NULL,
 		FOREIGN KEY (user_id) REFERENCES users(id)
 	)`)
+
+	db.Exec(`CREATE TABLE IF NOT EXISTS email_logs (
+		id TEXT PRIMARY KEY,
+		invoice_id TEXT NOT NULL,
+		sent_at TEXT NOT NULL,
+		subject TEXT NOT NULL,
+		body_html TEXT NOT NULL,
+		body_text TEXT NOT NULL,
+		FOREIGN KEY (invoice_id) REFERENCES invoices(id)
+	)`)
 }
 
 func router(w http.ResponseWriter, r *http.Request) {
@@ -175,6 +194,7 @@ func router(w http.ResponseWriter, r *http.Request) {
 	paidRegex := regexp.MustCompile(`^/api/invoices/[\w-]+/paid$`)
 	stopRegex := regexp.MustCompile(`^/api/invoices/[\w-]+/stop$`)
 	deleteRegex := regexp.MustCompile(`^/api/invoices/[\w-]+$`)
+	emailsRegex := regexp.MustCompile(`^/api/invoices/[\w-]+/emails$`)
 
 	switch {
 	case path == "/api/auth/google" && method == "GET":
@@ -197,6 +217,8 @@ func router(w http.ResponseWriter, r *http.Request) {
 		handleMarkPaid(w, r)
 	case stopRegex.MatchString(path) && method == "POST":
 		handleStopChasing(w, r)
+	case emailsRegex.MatchString(path) && method == "GET":
+		handleGetEmailLogs(w, r)
 	case deleteRegex.MatchString(path) && method == "DELETE":
 		handleDeleteInvoice(w, r)
 	case path == "/api/cron/chase" && (method == "GET" || method == "POST"):
@@ -593,6 +615,17 @@ func sendEmail(invoice *Invoice) error {
 		return fmt.Errorf("failed to send email: %d", resp.StatusCode)
 	}
 
+	// Log the email to the database
+	logID := uuid.New().String()
+	sentAt := time.Now().UTC().Format(time.RFC3339)
+	_, err = db.Exec(`INSERT INTO email_logs (id, invoice_id, sent_at, subject, body_html, body_text) 
+		VALUES (?, ?, ?, ?, ?, ?)`,
+		logID, invoice.ID, sentAt, subject, htmlBody, plainText)
+	if err != nil {
+		// Log error but don't fail the email send
+		fmt.Printf("Failed to log email: %v\n", err)
+	}
+
 	return nil
 }
 
@@ -750,6 +783,56 @@ func handleGetAllInvoices(w http.ResponseWriter, r *http.Request) {
 		invoices = []Invoice{}
 	}
 	jsonResponse(w, invoices, http.StatusOK)
+}
+
+func handleGetEmailLogs(w http.ResponseWriter, r *http.Request) {
+	user := getSessionUser(r)
+	if user == nil {
+		jsonResponse(w, map[string]string{"error": "Unauthorized"}, http.StatusUnauthorized)
+		return
+	}
+
+	// Extract invoice ID from path
+	path := r.URL.Path
+	parts := strings.Split(path, "/")
+	if len(parts) < 4 {
+		jsonResponse(w, map[string]string{"error": "Invalid path"}, http.StatusBadRequest)
+		return
+	}
+	invoiceID := parts[3]
+
+	// Verify the invoice belongs to the user
+	var userID string
+	err := db.QueryRow(`SELECT user_id FROM invoices WHERE id = ?`, invoiceID).Scan(&userID)
+	if err != nil {
+		jsonResponse(w, map[string]string{"error": "Invoice not found"}, http.StatusNotFound)
+		return
+	}
+	if userID != user.ID {
+		jsonResponse(w, map[string]string{"error": "Unauthorized"}, http.StatusUnauthorized)
+		return
+	}
+
+	// Get email logs for this invoice
+	rows, err := db.Query(`SELECT id, invoice_id, sent_at, subject, body_html, body_text 
+		FROM email_logs WHERE invoice_id = ? ORDER BY sent_at DESC`, invoiceID)
+	if err != nil {
+		jsonResponse(w, []EmailLog{}, http.StatusOK)
+		return
+	}
+	defer rows.Close()
+
+	var emails []EmailLog
+	for rows.Next() {
+		var email EmailLog
+		rows.Scan(&email.ID, &email.InvoiceID, &email.SentAt, &email.Subject, &email.BodyHTML, &email.BodyText)
+		emails = append(emails, email)
+	}
+
+	if emails == nil {
+		emails = []EmailLog{}
+	}
+	jsonResponse(w, emails, http.StatusOK)
 }
 
 func handleCreateInvoice(w http.ResponseWriter, r *http.Request) {

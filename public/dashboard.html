@@ -512,6 +512,106 @@
         font-size: 15px;
       }
 
+      .email-history-toggle {
+        font-size: 13px;
+        color: var(--text-muted);
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        margin-top: 8px;
+        padding-top: 8px;
+        border-top: 1px solid var(--border);
+        transition: color 0.2s;
+      }
+
+      .email-history-toggle:hover {
+        color: var(--accent);
+      }
+
+      .email-history-toggle-icon {
+        transition: transform 0.2s;
+      }
+
+      .email-history-toggle.expanded .email-history-toggle-icon {
+        transform: rotate(180deg);
+      }
+
+      .email-history-content {
+        display: none;
+        margin-top: 12px;
+        padding: 16px;
+        background: var(--bg);
+        border-radius: 6px;
+        border: 1px solid var(--border);
+      }
+
+      .email-history-content.show {
+        display: block;
+      }
+
+      .email-log-item {
+        padding: 12px;
+        border-bottom: 1px solid var(--border);
+        cursor: pointer;
+        transition: background 0.2s;
+      }
+
+      .email-log-item:last-child {
+        border-bottom: none;
+      }
+
+      .email-log-item:hover {
+        background: var(--card);
+      }
+
+      .email-log-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 4px;
+      }
+
+      .email-log-date {
+        font-size: 12px;
+        color: var(--text-muted);
+      }
+
+      .email-log-subject {
+        font-size: 14px;
+        font-weight: 500;
+        color: var(--text);
+      }
+
+      .email-log-body {
+        display: none;
+        margin-top: 12px;
+        padding: 12px;
+        background: var(--card);
+        border-radius: 4px;
+        font-size: 13px;
+        line-height: 1.6;
+        color: var(--text-muted);
+      }
+
+      .email-log-body.show {
+        display: block;
+      }
+
+      .email-history-loading {
+        text-align: center;
+        padding: 20px;
+        color: var(--text-muted);
+        font-size: 13px;
+      }
+
+      .email-history-empty {
+        text-align: center;
+        padding: 20px;
+        color: var(--text-muted);
+        font-size: 13px;
+      }
+
       .success-toast {
         position: fixed;
         bottom: 24px;
@@ -1108,6 +1208,16 @@
                 </div>
               `;
 
+              const emailHistoryToggle = inv.chase_count > 0 ? `
+                <div class="email-history-toggle" onclick="toggleEmailHistory('${inv.id}', event)">
+                    <span class="email-history-toggle-icon">▼</span>
+                    <span>View ${inv.chase_count} email${inv.chase_count > 1 ? 's' : ''} sent</span>
+                </div>
+                <div class="email-history-content" id="email-history-${inv.id}">
+                    <div class="email-history-loading">Loading...</div>
+                </div>
+              ` : '';
+
               return `
                 <div class="invoice-item ${isHistory ? 'history' : ''}">
                     <div class="invoice-info">
@@ -1116,6 +1226,7 @@
                             <span class="invoice-amount">$${escapeHtml(inv.amount)}</span> · ${escapeHtml(inv.invoice_number)} · ${escapeHtml(inv.client_email)}
                         </div>
                         ${timeline}
+                        ${emailHistoryToggle}
                     </div>
                     ${actions}
                 </div>
@@ -1139,6 +1250,89 @@
         setTimeout(() => {
           toast.style.display = "none";
         }, 3000);
+      }
+
+      // Email history functions
+      const emailHistoryCache = {};
+
+      async function fetchEmailHistory(invoiceId) {
+        if (emailHistoryCache[invoiceId]) {
+          return emailHistoryCache[invoiceId];
+        }
+
+        try {
+          const res = await fetch(`${API}/invoices/${invoiceId}/emails`, { 
+            credentials: "include" 
+          });
+          if (res.status === 401) {
+            window.location.href = "/";
+            return [];
+          }
+          const emails = await res.json();
+          emailHistoryCache[invoiceId] = emails;
+          return emails;
+        } catch (err) {
+          console.error("Failed to fetch email history:", err);
+          return [];
+        }
+      }
+
+      async function toggleEmailHistory(invoiceId, event) {
+        event.stopPropagation();
+        const toggle = event.currentTarget;
+        const content = document.getElementById(`email-history-${invoiceId}`);
+        
+        // Toggle expanded class on the toggle element
+        toggle.classList.toggle('expanded');
+        
+        // Toggle visibility
+        if (content.classList.contains('show')) {
+          content.classList.remove('show');
+        } else {
+          content.classList.add('show');
+          
+          // Load emails if not already loaded
+          if (!emailHistoryCache[invoiceId]) {
+            const emails = await fetchEmailHistory(invoiceId);
+            renderEmailHistory(emails, content);
+          }
+        }
+      }
+
+      function renderEmailHistory(emails, container) {
+        if (!emails || emails.length === 0) {
+          container.innerHTML = '<div class="email-history-empty">No email history found</div>';
+          return;
+        }
+
+        container.innerHTML = emails.map((email, index) => {
+          const sentDate = new Date(email.sent_at);
+          const formattedDate = sentDate.toLocaleDateString('en-US', { 
+            month: 'short', 
+            day: 'numeric', 
+            year: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+          });
+
+          return `
+            <div class="email-log-item" onclick="toggleEmailBody('email-body-${email.id}', event)">
+              <div class="email-log-header">
+                <div class="email-log-subject">${escapeHtml(email.subject)}</div>
+              </div>
+              <div class="email-log-date">${formattedDate}</div>
+              <div class="email-log-body" id="email-body-${email.id}">
+                ${email.body_html}
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
+
+      function toggleEmailBody(bodyId, event) {
+        event.stopPropagation();
+        const body = document.getElementById(bodyId);
+        body.classList.toggle('show');
       }
 
       function togglePreview() {
