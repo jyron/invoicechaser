@@ -586,16 +586,52 @@
       .email-log-body {
         display: none;
         margin-top: 12px;
-        padding: 12px;
+        padding: 20px;
         background: var(--card);
         border-radius: 4px;
-        font-size: 13px;
+        font-size: 14px;
         line-height: 1.6;
         color: var(--text-muted);
+        max-width: 100%;
+        overflow: auto;
       }
 
       .email-log-body.show {
         display: block;
+      }
+
+      .email-log-body p {
+        margin-bottom: 12px;
+      }
+
+      .email-log-body p:last-child {
+        margin-bottom: 0;
+      }
+
+      .email-log-body table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 12px 0;
+      }
+
+      .email-log-body td {
+        padding: 8px;
+        vertical-align: top;
+      }
+
+      /* Override email template inline styles for better display */
+      .email-log-body > div[style*="max-width"] {
+        max-width: 100% !important;
+        margin: 0 !important;
+      }
+
+      .email-log-body body {
+        background: transparent !important;
+        padding: 0 !important;
+      }
+
+      .email-log-body [style*="padding:40px"] {
+        padding: 20px !important;
       }
 
       .email-history-loading {
@@ -1299,6 +1335,28 @@
         }
       }
 
+      function extractEmailContent(htmlString) {
+        // Create a temporary div to parse the HTML
+        const tempDiv = document.createElement('div');
+        tempDiv.innerHTML = htmlString;
+        
+        // Try to find the main content div (the one with padding:40px)
+        const mainContent = tempDiv.querySelector('div[style*="padding:40px"]') || 
+                           tempDiv.querySelector('body > div > div') ||
+                           tempDiv;
+        
+        // Remove outer wrapper styles and return just the content
+        if (mainContent) {
+          // Remove the footer if it exists
+          const footer = mainContent.querySelector('[style*="text-align:center"][style*="padding:20px"]');
+          if (footer) footer.remove();
+          
+          return mainContent.innerHTML;
+        }
+        
+        return htmlString;
+      }
+
       function renderEmailHistory(emails, container) {
         if (!emails || emails.length === 0) {
           container.innerHTML = '<div class="email-history-empty">No email history found</div>';
@@ -1315,6 +1373,9 @@
             minute: '2-digit'
           });
 
+          // Extract and clean the email content
+          const cleanContent = extractEmailContent(email.body_html);
+
           return `
             <div class="email-log-item" onclick="toggleEmailBody('email-body-${email.id}', event)">
               <div class="email-log-header">
@@ -1322,7 +1383,7 @@
               </div>
               <div class="email-log-date">${formattedDate}</div>
               <div class="email-log-body" id="email-body-${email.id}">
-                ${email.body_html}
+                ${cleanContent}
               </div>
             </div>
           `;
