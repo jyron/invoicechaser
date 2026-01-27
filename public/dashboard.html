@@ -753,7 +753,7 @@
         <div class="stats-summary" id="statsSummary" style="display: none;">
           <div class="stat-item">
             <div class="stat-value" id="statInvoices">0</div>
-            <div class="stat-label">Active Invoices</div>
+            <div class="stat-label">Active Balances</div>
           </div>
           <div class="stat-item">
             <div class="stat-value" id="statAmount">$0</div>
@@ -761,14 +761,14 @@
           </div>
           <div class="stat-item">
             <div class="stat-value" id="statEmails">0</div>
-            <div class="stat-label">Emails Sent</div>
+            <div class="stat-label">Reminders Sent</div>
           </div>
         </div>
 
         <header>
-          <h1>Chase an Invoice</h1>
+          <h1>Send Payment Reminder</h1>
           <p class="subtitle">
-            Add an invoice and we'll send polite follow-ups every 3 days.
+            Add an outstanding balance and we'll send professional reminders every 3 days.
           </p>
         </header>
 
@@ -796,20 +796,20 @@
 
             <div class="row">
               <div class="form-group">
-                <label>Invoice Amount</label>
+                <label>Balance Amount</label>
                 <input
                   type="text"
                   id="invoiceAmount"
-                  placeholder="$5,000"
+                  placeholder="$250"
                   required
                 />
               </div>
               <div class="form-group">
-                <label>Invoice Number</label>
+                <label>Account/Invoice Number</label>
                 <input
                   type="text"
                   id="invoiceNumber"
-                  placeholder="INV-001"
+                  placeholder="ACC-001"
                   required
                 />
               </div>
@@ -830,7 +830,7 @@
               <input
                 type="email"
                 id="yourEmail"
-                placeholder="you@company.com"
+                placeholder="you@business.com"
                 required
               />
             </div>
@@ -853,8 +853,8 @@
               <div class="preview-content" id="previewContent">
                 <p>Hi <strong>[Client Name]</strong>,</p>
                 <p>
-                  I hope you're doing well. I wanted to follow up on invoice
-                  <strong>[Invoice #]</strong> for <strong>[Amount]</strong>,
+                  I hope you're doing well. I wanted to follow up on your outstanding balance
+                  <strong>[Account #]</strong> for <strong>[Amount]</strong>,
                   which appears to still be outstanding.
                 </p>
                 <p>
@@ -863,13 +863,13 @@
                   questions or if there's anything I can help with to process
                   this payment.
                 </p>
-                <p>Thanks so much,<br /><strong>[Your Name]</strong></p>
+                <p>Thank you,<br /><strong>[Your Name]</strong></p>
               </div>
             </div>
 
             <div class="form-group" style="margin-top: 24px">
               <button type="submit" class="btn" id="submitBtn">
-                Start Chasing
+                Send Reminder
               </button>
             </div>
           </form>
@@ -877,7 +877,7 @@
 
         <div class="active-invoices" id="activeInvoices">
           <div class="section-header">
-            <h2 id="sectionTitle">Active Chases</h2>
+            <h2 id="sectionTitle">Active Reminders</h2>
             <div class="tab-toggle">
               <button class="tab-btn active" onclick="showTab('active')">Active</button>
               <button class="tab-btn" onclick="showTab('history')">History</button>
@@ -890,13 +890,13 @@
 
         <footer>
           <p>
-            Receivables.ch — because asking for money should not be awkward.
+            Receivables.ch — Automated payment reminders for busy businesses.
           </p>
         </footer>
       </div>
     </div>
 
-    <div class="success-toast" id="toast">Invoice added! First email sent.</div>
+    <div class="success-toast" id="toast">Balance added! First reminder sent.</div>
 
     <!-- Celebration Modal -->
     <div class="modal-overlay" id="celebrationModal">
@@ -1006,7 +1006,7 @@
         const historyInvoices = allInvoices.filter(inv => inv.status === 'paid' || inv.status === 'stopped');
         
         if (currentTab === 'active') {
-          document.getElementById('sectionTitle').textContent = 'Active Chases';
+          document.getElementById('sectionTitle').textContent = 'Active Reminders';
           renderInvoices(activeInvoices, false);
         } else {
           document.getElementById('sectionTitle').textContent = 'History';
@@ -1073,8 +1073,8 @@
 
         if (!invoices || invoices.length === 0) {
           const emptyMsg = isHistory 
-            ? 'No invoice history yet. Paid or stopped invoices will appear here.'
-            : 'No active invoices. Add one above to start chasing.';
+            ? 'No history yet. Paid or stopped balances will appear here.'
+            : 'No active reminders. Add a balance above to get started.';
           list.innerHTML = `<div class="empty-state">${emptyMsg}</div>`;
           return;
         }
@@ -1097,13 +1097,13 @@
 
               const actions = !isHistory ? `
                 <div class="invoice-status">
-                    <div class="chase-count"><span>${inv.chase_count}</span> emails sent</div>
+                    <div class="chase-count"><span>${inv.chase_count}</span> reminders sent</div>
                     <button class="btn-paid" onclick="markPaid('${inv.id}', '${escapeHtml(inv.amount)}')">Got Paid</button>
                     <button class="btn-stop" onclick="stopChasing('${inv.id}')">Stop</button>
                 </div>
               ` : `
                 <div class="invoice-status">
-                    <div class="chase-count"><span>${inv.chase_count}</span> emails sent</div>
+                    <div class="chase-count"><span>${inv.chase_count}</span> reminders sent</div>
                     ${statusBadge}
                 </div>
               `;
@@ -1160,7 +1160,7 @@
         previewContent.innerHTML = `
           <p>Hi <strong>${escapeHtml(clientName)}</strong>,</p>
           <p>
-            I hope you're doing well. I wanted to follow up on invoice
+            I hope you're doing well. I wanted to follow up on your outstanding balance
             <strong>${escapeHtml(
               invoiceNumber
             )}</strong> for <strong>$${escapeHtml(amount)}</strong>,
@@ -1171,7 +1171,7 @@
             friendly reminder. Please let me know if you have any questions
             or if there's anything I can help with to process this payment.
           </p>
-          <p>Thanks so much,<br /><strong>${escapeHtml(yourName)}</strong></p>
+          <p>Thank you,<br /><strong>${escapeHtml(yourName)}</strong></p>
         `;
       }
 
@@ -1232,12 +1232,12 @@
             document.getElementById("invoiceNumber").value = "";
 
             fetchInvoices();
-            showToast("Invoice added! First email sent.");
+            showToast("Balance added! First reminder sent.");
           } catch (err) {
             showToast(err.message || "Failed to send. Please try again.", true);
           } finally {
             btn.disabled = false;
-            btn.textContent = "Start Chasing";
+            btn.textContent = "Send Reminder";
           }
         });
 
@@ -1248,7 +1248,7 @@
         
         amountText.textContent = `You collected $${amount}!`;
         
-        const tweetText = `Just collected $${amount} in overdue invoices with InvoiceChaser! 💰 No more awkward follow-up emails. hndshake.com`;
+        const tweetText = `Just collected $${amount} in outstanding balances with Receivables.ch! 💰 No more awkward payment calls. receivables.ch`;
         twitterBtn.href = `https://twitter.com/intent/tweet?text=${encodeURIComponent(tweetText)}`;
         
         modal.classList.add("show");
@@ -1283,7 +1283,7 @@
       async function markPaid(id, amount) {
         showConfirmation(
           "Mark as Paid?",
-          "We'll stop sending reminders for this invoice.",
+          "We'll stop sending reminders for this balance.",
           async () => {
             try {
               const res = await fetch(`${API}/invoices/${id}/paid`, {
@@ -1305,8 +1305,8 @@
 
       async function stopChasing(id) {
         showConfirmation(
-          "Stop Chasing?",
-          "You can always start chasing again by adding the invoice.",
+          "Stop Reminders?",
+          "You can always start reminders again by adding the balance.",
           async () => {
             try {
               const res = await fetch(`${API}/invoices/${id}/stop`, {
@@ -1318,7 +1318,7 @@
                 return;
               }
               fetchInvoices();
-              showToast("Stopped chasing.");
+              showToast("Stopped reminders.");
             } catch (err) {
               showToast("Something went wrong.", true);
             }
